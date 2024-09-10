@@ -1,0 +1,134 @@
+﻿@using Syncfusion.EJ2
+
+@{
+    ViewBag.Title = "Match Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var navbarColor = (ViewData["kaun"] as string == "user") ? "cadetblue" : "royalblue";
+
+}
+
+<style>
+    body {
+        background-color: white
+    }
+
+    .login-container h2 {
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333; /* Text color for the heading */
+    }
+
+    .navbar-brand {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+
+    .nav-link {
+        font-size: 1.1em;
+        padding: 10px 15px;
+    }
+
+
+    .nav-item:hover .nav-link {
+        background-color: #007bff;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #555; /* Text color for labels */
+        }
+
+        .form-group button {
+            width: 10%;
+            padding: 12px;
+            margin-right: 5%;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px; /* Reduced font size */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+        }
+
+            .form-group button:hover {
+                background-color: aliceblue; /* Darker background color on hover */
+            }
+</style>
+
+<body style="background-color:azure">
+    <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark" style="background-color: @navbarColor">
+        <div class="container-fluid">
+            <img src="~/Content/Images/c.png" height="100" style="margin-right:1%" />
+            @Html.ActionLink("FILTERED MATCHES", "FilteredMatchResult", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-lg-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("BACK", "MatchFilter", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("VIEW", "ViewMatches", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br />
+    <div>
+        <div style="display: flex; justify-content: space-between; align-items:center;">
+            <span style="font-weight:bold; color:gray">
+                MATCH START DATE:   
+                <span style="color:black; font-weight:normal;  ">
+                    @TempData["Start"]
+                </span>
+            </span>
+            </br>
+            <span style="font-weight: bold; color: gray">
+                MATCH END DATE:  
+                <span style="color:black; font-weight:normal;">
+                    @TempData["End"]
+                </span>
+            </span>
+            
+        </div>
+        </br>
+
+        <div class="main-container">
+            @(Html.EJS().Grid("Overview").DataSource((IEnumerable<Vispl.Training.Crickinfo.VO.MatchFilter_VO>)TempData["FilteredData"]).AllowMultiSorting(true).AllowFiltering().AllowSorting().Columns(col =>
+        {
+            col.Field("Team_A").HeaderText("Team A").Width("150").AllowSearching(true).Add();
+            col.Field("Team_B").HeaderText("Team B").Width("150").AllowSearching(true).Add();
+            col.Field("MatchVenue").HeaderText("Venue").Width("150").AllowSearching(true).Add();
+            col.Field("MatchStatus").HeaderText("Status").Width("150").AllowSearching(true).Add();
+            col.Field("MatchType").HeaderText("Type").Width("150").AllowSearching(true).Add();
+            col.Field("MatchResult").HeaderText("Result").Width("150").AllowSearching(true).Add();
+            col.Field("MatchTimings").HeaderText("Match Scheduled On").Width("150").AllowSearching(true).Add();
+        }).EditSettings(edit => { edit.Mode(Syncfusion.EJ2.Grids.EditMode.Batch); }).Toolbar(new List<string>
+    () { "Add", "Delete", "Update", "Cancel" })
+    .AllowSorting()
+    .AllowSelection(true)
+    .SelectionSettings(select => select.Type(Syncfusion.EJ2.Grids.SelectionType.Multiple).PersistSelection(true).CheckboxOnly(true))
+    .AllowPaging(true)
+    .Height(500)
+    .AllowTextWrap()
+    .EnableHover()
+    .LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+    .Render()
+    )
+        </div>
+    </div>
+</body>

@@ -1,0 +1,662 @@
+﻿@model Vispl.Training.Crickinfo.VO.Player_VO
+@using Syncfusion.EJ2.DropDowns
+@using Syncfusion.EJ2
+
+@{
+    ViewBag.Title = "New Player Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teams = TempData["Teams"] as List<object>;
+}
+
+
+<style>
+
+    .navbar-brand {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+
+    .nav-link {
+        font-size: 1.1em;
+        padding: 10px 15px;
+    }
+
+
+    .nav-item:hover .nav-link {
+        background-color: #007bff;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .main-container {
+        padding: 40px;
+        border: 2px dashed #007bff; /* Add a dashed border */
+        border-radius: 10px; /* Rounded corners */
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-container h2 {
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333; /* Text color for the heading */
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #555; /* Text color for labels */
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px; /* Reduced font size */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+        }
+
+            .form-group button:hover {
+                background-color: aliceblue; /* Darker background color on hover */
+            }
+
+
+    .e-upload.e-control-wrapper, .e-bigger.e-small .e-upload.e-control-wrapper {
+        width: 100%;
+        border: 1px dashed #007bff !important;
+    }
+
+    .e-file-select,
+    .e-file-drop {
+        display: none;
+    }
+
+    .e-checkbox-wrapper, .e-css.e-checkbox-wrapper, .e-control e-checkbox e-lib {
+        width: 15%;
+    }
+
+
+    
+    
+</style>
+
+<body>
+
+    <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary">
+        <div class="container-fluid">
+            <img src="~/Content/Images/p.png" height="110" style="margin-right:30px" />
+            @Html.ActionLink($"NEW PLAYER FORM", "AddPlayer", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-lg-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("BACK", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("VIEW", "ViewPlayers", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <br />
+
+    <div class="form-group">
+        <h4 style="text-align:end">Total Count: <span style="color:black">@Convert.ToInt32(TempData["Count"])</span></h4>
+    </div>
+    @Html.ValidationSummary()
+    <div class="main-container">
+        <form id="cricketForm" action="@Url.Action("AddPlayer", "Cricket")" method="POST" enctype="multipart/form-data" autocomplete="on">
+
+            <div class="form-column-left">
+
+                @*Profile Picture*@
+                <div class="form-group" id="pict">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.ProfilePicture)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                </div>
+                <div class="col-md-10" style="width: 16.5%; margin-bottom:2%">
+                    @Html.EJS().Uploader("UploadFiles").AllowedExtensions(".jpeg, .jpg, .png, .ico").Removing("filesRemoving").Selected("filesSelect").Multiple(false).AutoUpload(false).MaxFileSize(1000000).Render()
+                </div>
+
+                @*Jersey Number*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.Jersey)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().NumericTextBoxFor(model => model.Jersey).Placeholder("Enter Jersey Number").Width("20%").Value("").Format("##").Min(0).ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.Jersey, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*First Name*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.FirstName)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().TextBoxFor(model => model.FirstName).Placeholder("Enter First Name").Width("20%").Value("").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*Middle Name*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.MiddleName)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().TextBoxFor(model => model.MiddleName).Placeholder("Enter Middle Name").Value("").Width("20%").Value("").ShowClearButton().Render()
+                    </div>
+                </div>
+
+                @*Last name*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.LastName)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().TextBoxFor(model => model.LastName).Placeholder("Enter Last Name").Width("20%").ShowClearButton().Value("").Render()
+                        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*D.O.B.*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.DOB)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().DatePickerFor(model => model.DOB).Placeholder("Select Date of Birth").Format("dd/MM/yyyy").Width("20%").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.DOB, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*Age*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.Age)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().NumericTextBoxFor(model => model.Age).Placeholder("Enter Age").Width("20%").Format("n0").Min(18).Value("").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.Age, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-column-center">
+                @*Birth Place*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.BirthPlace)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().TextBoxFor(model => model.BirthPlace).Placeholder("Enter Birth Place").Width("20%").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.BirthPlace, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*Captain*@
+                <div class="form-group" style="width: 190px;">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.IsCaptain)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            @Html.EJS().RadioButtonFor(model => model.IsCaptain, "YES").Label("YES").Name("IsCaptain").Value("YES").Render()
+                        </div>
+                        <div class="row">
+                            @Html.EJS().RadioButtonFor(model => model.IsCaptain, "NO").Label("NO").Name("IsCaptain").Value("NO").Checked(true).Render()
+                        </div>
+                    </div>
+                </div>
+
+                @*Substitute*@
+                <div class="form-group" style="width: 190px;">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.IsSubstitute)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        <div class="row">
+                            @Html.EJS().RadioButtonFor(model => model.IsSubstitute, "YES").Label("YES").Name("IsSubstitute").Value("YES").Render()
+                        </div>
+                        <div class="row">
+                            @Html.EJS().RadioButtonFor(model => model.IsSubstitute, "NO").Label("NO").Name("IsSubstitute").Value("NO").Checked(true).Render()
+                        </div>
+                    </div>
+                </div>
+
+
+                @*Franchise*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.Franchise)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().DropDownListFor(model => model.Franchise).DataSource(teams).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).AllowFiltering(true).Placeholder("Select a Team").Width("20%").ShowClearButton().Render()
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-column-right">
+                @*Matches Played*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.MatchesPlayed)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().NumericTextBoxFor(model => model.MatchesPlayed).Placeholder("Enter Matches Played").Width("20%").Format("n0").Min(0).Value("").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.MatchesPlayed, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*Runs Scored*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.RunsScored)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().NumericTextBoxFor(model => model.RunsScored).Placeholder("Enter Runs Scored").Width("20%").Format("n0").Min(0).Value("").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.RunsScored, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*Wickets Taken*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.WicketsTaken)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().NumericTextBoxFor(model => model.WicketsTaken).Placeholder("Enter Wickets Taken").Width("20%").Format("n0").Min(0).Value("").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.WicketsTaken, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-column-right">
+                @*Centuries*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.Centuries)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().NumericTextBoxFor(model => model.Centuries).Placeholder("Enter Centuries").Width("20%").Format("n0").Min(0).Value("").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.Centuries, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*Half Centuries*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.HalfCenturies)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().NumericTextBoxFor(model => model.HalfCenturies).Placeholder("Enter Half Centuries").Width("20%").Format("n0").Min(0).Value("").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.HalfCenturies, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*Debut Date*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.DebutDate)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().DatePickerFor(model => model.DebutDate).Placeholder("Select Debut Date").Format("dd/MM/yyyy").Width("20%").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.DebutDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*ICC Ranking*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.ICCRanking)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().NumericTextBoxFor(model => model.ICCRanking).Placeholder("Enter ICC Ranking").Width("20%").Format("n0").Min(0).Value("").ShowClearButton().Render()
+                        @Html.ValidationMessageFor(model => model.ICCRanking, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                @*Country*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.Country)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().DropDownListFor(model => model.Country).DataSource((IEnumerable<object>)TempData["Countries"]).Placeholder("Select the Country").Fields(new Syncfusion.EJ2.DropDowns.DropDownListFieldSettings { Text = "text", Value = "text" }).Value("").Width("20%").Render()
+                        @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                @*Position*@
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.Position)
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="col-md-10" style="margin-left:0.5%">
+                        <div class="row">
+                            @Html.EJS().CheckBox("PositionBatsman").Label("BATSMAN").Name("Batsman").Change("batsman").Value("").Render()
+                        </div>
+                        <div class="row">
+                            @Html.EJS().CheckBox("PositionBaller").Label("BALLER").Name("Baller").Change("baller").Value("").Render()
+                        </div>
+                        <div class="row">
+                            @Html.EJS().CheckBox("PositionFielder").Label("FIELDER").Name("Fielder").Change("fielder").Value("").Render()
+                        </div>
+                        <div class="row">
+                            @Html.EJS().CheckBox("PositionAllRounder").Label("ALL ROUNDER").Name("AllRounder").Change("handleAllrounderChange").Value("").Render()
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            @*Submit*@
+            <div class="form-group" style="margin-top:5%">
+                @Html.EJS().Button("button").Content("ADD").IsPrimary(true).HtmlAttributes(new Dictionary<string, object>
+                { { "onclick", "submitForm()" }, { "type", "button" } }).Render()
+            </div>
+
+        </form>
+    </div>
+
+    <script type="text/javascript">
+
+        var size;
+        var isFileSelected = false;
+
+
+        function imageSelected(args)
+        {
+            var uploadObj = document.getElementById("UploadFiles")
+            args.filesData.splice(1);
+            var filesData = uploadObj.ej2_instances[0].getFilesData();
+            var allFiles = filesData.concat(args.filesData);
+
+            if (allFiles.length > 1) {
+                allFiles = allFiles.slice(0, 1);
+            }
+
+            args.filesData = allFiles;
+            args.modifiedFilesData = args.filesData;
+            args.isModified = true;
+        }
+
+        function imageUnSelected(args)
+        {
+            args.postRawFile = false;
+        }
+
+        function filesSelect(args)
+        {
+            if (args.filesData.length > 0)
+            {
+                isFileSelected = true;
+                size = args.filesData[0].size;
+            }
+            else
+            {
+                isFileSelected = false;
+            }
+        }
+
+        function filesRemoving(args)
+        {
+            var uploaderInstance = document.getElementById("UploadFiles").ej2_instances[0];
+            var remainingFiles = uploaderInstance.getFilesData().length - 1;
+
+            if (remainingFiles === 0)
+            {
+                isFileSelected = false;
+                size = 0;
+                console.log("FIle is Removed");
+            }
+        }
+
+        function handleAllrounderChange(args)
+        {
+            if (args.checked)
+            {
+                document.getElementById("PositionBatsman").ej2_instances[0].checked = false;
+                document.getElementById("PositionBaller").ej2_instances[0].checked = false;
+                document.getElementById("PositionFielder").ej2_instances[0].checked = false;
+                document.getElementById("PositionAllRounder").ej2_instances[0].value = "BATSMAN, BALLER, FIELDER";
+
+                document.getElementById("PositionBatsman").ej2_instances[0].disabled = true;
+                document.getElementById("PositionBaller").ej2_instances[0].disabled = true;
+                document.getElementById("PositionFielder").ej2_instances[0].disabled = true;
+            }
+            else
+            {
+                document.getElementById("PositionAllRounder").ej2_instances[0].value = "";
+                document.getElementById("PositionBatsman").ej2_instances[0].checked = false;
+                document.getElementById("PositionBaller").ej2_instances[0].checked = false;
+                document.getElementById("PositionFielder").ej2_instances[0].checked = false;
+
+                document.getElementById("PositionBatsman").ej2_instances[0].value = "";
+                document.getElementById("PositionBaller").ej2_instances[0].value = "";
+                document.getElementById("PositionFielder").ej2_instances[0].value = "";
+
+                document.getElementById("PositionBatsman").ej2_instances[0].disabled = false;
+                document.getElementById("PositionBaller").ej2_instances[0].disabled = false;
+                document.getElementById("PositionFielder").ej2_instances[0].disabled = false;
+            }
+        }
+
+        function batsman(args)
+        {
+            if (args.checked)
+            {
+                document.getElementById("PositionBatsman").ej2_instances[0].value = "BATSMAN";
+                console.log("Batsman Value assigned");
+            }
+            else
+            {
+                document.getElementById("PositionBatsman").ej2_instances[0].value = "";
+                console.log("Batsman Value is now null");
+            }
+        }
+
+        function baller(args)
+        {
+            if (args.checked)
+            {
+                document.getElementById("PositionBaller").ej2_instances[0].value = "BALLER";
+                console.log("Baller Value assigned");
+            }
+            else
+            {
+                document.getElementById("PositionBaller").ej2_instances[0].value = "";
+                console.log("Baller Value is now null");
+            }
+        }
+
+        function fielder(args)
+        {
+            if (args.checked) {
+                document.getElementById("PositionFielder").ej2_instances[0].value = "FIELDER";
+                console.log("Fielder Value assigned");
+            }
+            else
+            {
+                document.getElementById("PositionFielder").ej2_instances[0].value = "";
+                console.log("Fielder Value is now null");
+            }
+        }
+
+        function submitForm()
+        {
+            var jersey = document.getElementById("Jersey");
+            var first = document.getElementById("FirstName");
+            var last = document.getElementById("LastName");
+            var DOB = document.getElementById("DOB");
+            var age = document.getElementById("Age");
+            var birthPlace = document.getElementById("BirthPlace");
+            var matchesPlayed = document.getElementById("MatchesPlayed");
+            var runsScored = document.getElementById("RunsScored");
+            var wicketsTaken = document.getElementById("WicketsTaken");
+            var centuries = document.getElementById("Centuries");
+            var halfCenturies = document.getElementById("HalfCenturies");
+            var debutDate = document.getElementById("DebutDate");
+            var iccRanking = document.getElementById("ICCRanking");
+            var country = document.getElementById("Country");
+            var batsman = document.getElementById("PositionBatsman").ej2_instances[0];
+            var baller = document.getElementById("PositionBaller").ej2_instances[0];
+            var fielder = document.getElementById("PositionFielder").ej2_instances[0];
+            var allRounder = document.getElementById("PositionAllRounder").ej2_instances[0];
+
+
+            if (!isFileSelected) {
+                alert("No file selected.");
+                return;
+            }
+            else if (size > 1000000) {
+                alert("File is bigger than 1 MB.");
+                return;
+            }
+            else if (jersey.value === "") {
+                alert("Jersey Number cannot be empty!");
+                jersey.focus();
+            }
+            else if (first.value === "") {
+                alert("First Name cannot be empty!");
+                first.focus();
+            }
+            else if (last.value === "") {
+                alert("Last Name cannot be empty!");
+                last.focus();
+            }
+            else if (DOB.value === "") {
+                alert("D.O.B. cannot be empty!");
+                DOB.focus();
+            }
+            else if (age.value === "") {
+                alert("Age cannot be empty!");
+                age.focus();
+            }
+            else if (age.value < 18) {
+                alert("Age cannot be less than 18");
+                age.focus();
+            }
+            else if (birthPlace.value === "") {
+                alert("Birth Place cannot be empty!");
+                birthPlace.focus();
+            }
+            else if (matchesPlayed.value === "") {
+                alert("Please Enter number of Matches Played!");
+                matchesPlayed.focus();
+            }
+            else if (runsScored.value === "") {
+                alert("Please Enter number of Runs Scored!");
+                runsScored.focus();
+            }
+            else if (centuries.value === "") {
+                alert("Please enter number of centuries scored");
+                centuries.focus();
+            }
+            else if (halfCenturies.value === "") {
+                alert("Please enter number of half centuries scored");
+                halfCenturies.focus();
+            }
+            else if (wicketsTaken.value === "") {
+                alert("Please enter number of wickets taken");
+                wicketsTaken.focus();
+            }
+            else if (debutDate.value === "") {
+                alert("Debut Date cannot be empty!");
+                debutDate.focus();
+            }
+            else if (iccRanking.value === "") {
+                alert("Please enter the ICC ranking");
+                iccRanking.focus();
+            }
+            else if (country.value === "") {
+                alert("Please select a Country!");
+                country.focus();
+            }
+            else if (batsman.value === "" && baller.value === "" && fielder.value === "" && allRounder.value === "")
+            {
+                alert("Please select a Position");
+                document.getElementById("PositionBatsman").focus();
+            }
+            else if (batsman.value === null && baller.value === null && fielder.value === null && allRounder.value === null)
+            {
+                alert("Please select a Position");
+                document.getElementById("PositionBatsman").focus();
+            }
+            else
+            {
+                if (@TempData["Count"] <= 80)
+                {
+                    console.log("BATSMAN: ");
+                    console.log("batsman value: " + batsman.value);
+                    console.log("batsman check: " + batsman.checked);
+                    console.log("batsman disabled: " + batsman.disabled + "\n");
+
+                    console.log("BALLER: ");
+                    console.log("Baller Value: " + baller.value);
+                    console.log("Baller check: " + baller.checked);
+                    console.log("Baller disabled: " + baller.disabled + "\n");
+
+                    console.log("FIELDER: ");
+                    console.log("Fielder value: " + fielder.value);
+                    console.log("Fielder check: " + fielder.checked);
+                    console.log("Fielder disabled: " + fielder.disabled + "\n");
+
+                    console.log("ALL ROUNDER: ");
+                    console.log("All Rounder Value: " + allRounder.value);
+
+                    console.log("File is ready to be uploaded.");
+                    console.log("File size is: " + size);
+                    console.log("File selected: " + isFileSelected);
+
+                    document.getElementById("cricketForm").submit();
+                }
+                else
+                {
+                    alert("Record Count is more than 80. Please delete some records first!");
+                }
+            }
+        }
+
+    </script>
+
+</body>

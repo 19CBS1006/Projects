@@ -1,0 +1,207 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Vispl.Training.Crikinfo</name>
+    </assembly>
+    <members>
+        <member name="T:Vispl.Training.Crickinfo.UI.CricketController">
+            <summary>
+            Cricket Scoreboard Controller
+            </summary>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.Login">
+            <summary>
+            GET: Login
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.Login(Vispl.Training.Crickinfo.VO.Login_VO)">
+            <summary>
+            POST: Login
+            </summary>
+            <param name="VO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.UserPage">
+            <summary>
+            User Main Page (Dashboard)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.AdminPage">
+            <summary>
+            GET: ADMIN Page
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.AddPlayer">
+            <summary>
+            GET: Index
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.AddPlayer(Vispl.Training.Crickinfo.VO.Player_VO,System.Collections.Generic.IEnumerable{System.Web.HttpPostedFileBase})">
+            <summary>
+            POST: Add PLayer
+            </summary>
+            <param name="VO"></param>
+            <param name="UploadFiles"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.AddTeam">
+            <summary>
+            Adding Team Details
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.AddTeam(Vispl.Training.Crickinfo.VO.Team_VO,System.Collections.Generic.IEnumerable{System.Web.HttpPostedFileBase})">
+            <summary>
+            Adding Team
+            </summary>
+            <param name="VO"></param>
+            <param name="UploadFiles"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.AddMatch">
+            <summary>
+            GET: AddMatch (Adding Match Schedule)
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.AddMatch(Vispl.Training.Crickinfo.VO.Match_VO)">
+            <summary>
+            POST: AddMatch (Saving Match Schedule)
+            </summary>
+            <param name="VO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.LiveMatch">
+            <summary>
+            Gogin to Matches Scheduled for Live Page
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.NewMatch(System.String)">
+            <summary>
+            GET: Match Details
+            </summary>
+            <param name="ID"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.TossDecision(System.String)">
+            <summary>
+            GET: Starting Toss
+            </summary>
+            <param name="ID"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.TossDecision(Vispl.Training.Crickinfo.VO.Toss_Decision_VO)">
+            <summary>
+            POST: Toss Decision
+            </summary>
+            <param name="VO"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.SelectPlayers(System.String)">
+            <summary>
+            Selecting Players
+            </summary>
+            <param name="ID"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.SelectPlayers(Vispl.Training.Crickinfo.VO.SelectPlayers_VO)">
+            <summary>
+            POST: Sending the Players to DB
+            </summary>
+            <param name="VO"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.LiveScoreUpdate(System.String)">
+            <summary>
+            Live Score Update
+            </summary>
+            <param name="ID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.LiveScoreUpdate(Vispl.Training.Crickinfo.VO.ScoreBoard_VO)">
+            <summary>
+            Live Score Updation
+            </summary>
+            <param name="VO"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.ViewPlayers">
+            <summary>
+            GET: View Players Details Page
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.ViewTeams">
+            <summary>
+            GET: Team Details
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.ViewMatches">
+            <summary>
+            View Match Schedule
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.MatchFilter">
+            <summary>
+            GET: Time Zones
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.MatchFilter(Vispl.Training.Crickinfo.VO.MatchFilter_VO)">
+            <summary>
+            POST: Match Filtering
+            </summary>
+            <param name="VO"></param>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.FilteredMatchResult">
+            <summary>
+            GET: Filtererd Match Result
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.Exception"></exception>
+        </member>
+        <member name="M:Vispl.Training.Crickinfo.UI.CricketController.Disposing">
+            <summary>
+            Disposing Aall the Objects
+            </summary>
+        </member>
+        <member name="T:Cricket_ScoreBoard.RouteConfig">
+            <summary>
+            RouteConfig File
+            </summary>
+        </member>
+        <member name="M:Cricket_ScoreBoard.RouteConfig.RouteConfiguration(System.Web.Routing.RouteCollection)">
+            <summary>
+            Route Configuration
+            </summary>
+            <param name="route"></param>
+        </member>
+        <member name="T:Cricket_ScoreBoard.Global">
+            <summary>
+            Gloabal ASAX File
+            </summary>
+        </member>
+        <member name="M:Cricket_ScoreBoard.Global.Application_Start(System.Object,System.EventArgs)">
+            <summary>
+            Application Start
+            </summary>
+            <param name="sender"></param>
+            <param name="e"></param>
+        </member>
+    </members>
+</doc>

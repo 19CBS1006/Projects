@@ -1,0 +1,147 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var matchID = ViewData["MatchId"];
+    var teamA = ViewData["TeamAName"] as string;
+    var shortA = ViewData["TeamAShortName"] as string;
+    var logoA = ViewData["TeamAIcon"] as string;
+    var shortB = ViewData["TeamBShortName"] as string;
+    var teamB = ViewData["TeamBName"] as string;
+    var logoB = ViewData["TeamBIcon"] as string;
+    var type = ViewData["MatchType"] as string;
+    var venue = ViewData["MatchVenue"] as string;
+    var timings = ViewData["MatchTimings"] as string;
+    ViewBag.Title = shortA + " vs " + shortB;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-link {
+            font-size: 1.1em;
+            padding: 10px 15px;
+        }
+
+
+        .nav-item:hover .nav-link {
+            background-color: cornflowerblue;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar {
+            background-color: skyblue;
+        }
+
+
+        .e-header-text-hello:hover {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        #clock {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark">
+            <div class="container-fluid">
+                <img src="~/Content/Images/a2.png" height="70" style="margin-right:30px" />
+                @Html.ActionLink($"LIVE MATCH", "LiveMatch", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav w-100 d-flex justify-content-center" style="color:white; margin-right:10%">
+                        <li class="nav-item">
+                            @Html.ActionLink("Admin Dashboard", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link", style = "font-weight: bold; color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Players", "ViewPlayers", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Teams", "ViewTeams", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Matches", "ViewMatches", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Match Filter", "MatchFilter", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Logout", "UserPage", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Back", "LiveMatch", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <br />
+
+    <div style="background-color:aliceblue;padding:10px">
+        <div style="display: flex; justify-content: flex-end; position: absolute; right: 2%;">
+            @Html.ActionLink("TOSS", "TossDecision", "Cricket", new { ID = matchID }, new { @class = "btn btn-primary btn-lg" })
+        </div>
+        <h5>MATCH DETAILS</h5>
+        @timings
+        @venue
+        @type
+        <br />
+    </div>
+
+    <br />
+
+    <div >
+        @Html.EJS().DashboardLayout("layout2").Columns(11).AllowDragging(false).AllowFloating(false).ContentTemplate(
+        @<div>
+            <div id="panel1" class="e-panel" data-row="0" data-col="0" data-sizeX="5" data-sizeY="4">
+                <div class="e-panel-header" style=" display: flex; justify-content: space-between; align-items: center; height: 10%; font-size: 18px; font-weight: bold;">
+                    <div class="e-header-text" style="font-weight: bold; ">
+                        <img src="data:image/png;base64,@logoA" style="width:55px;height:50px;border-radius:50%;" />
+                        @teamA (@shortA)
+                    </div>
+                </div>
+                <div class="e-panel-container">
+                    @Html.Partial("~/Views/NewMatchPartialViews/_Players_TeamA_Data.cshtml", ViewData)
+                </div>
+            </div>
+
+            <div style="text-align: center; padding-top:13% ">
+
+                <img src="~/Content/Images/vs.png" height="150" />
+            </div>
+
+            <div id="panel3" class="e-panel" data-row="0" data-col="6" data-sizeX="5" data-sizeY="4">
+                <div class="e-panel-header" style=" display: flex; justify-content: space-between; align-items: center; height: 10%; font-size: 18px; font-weight: bold; ">
+                    <div class="e-header-text" style="font-weight: bold; ">
+                        <img src="data:image/png;base64,@logoB" style="width:60px;height:50px;border-radius:50%;" />
+                        @teamB (@shortB)
+                    </div>
+                </div>
+                <div class="e-panel-container">
+                    @Html.Partial("~/Views/NewMatchPartialViews/_Players_TeamB_Data.cshtml", ViewData)
+                </div>
+            </div>
+    </div>).Render()
+    </div>
+
+
+</body>
+</html>

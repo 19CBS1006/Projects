@@ -1,0 +1,234 @@
+﻿
+@{
+    string teamA = ViewData["TeamAShortName"] as string;
+    string teamB = ViewData["TeamBShortName"] as string;
+    string teamAName = ViewData["TeamAName"] as string;
+    string teamBName = ViewData["TeamBName"] as string;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = teamA + " vs " + teamB + " - INNINGS";
+    float? overs = ViewData["Balls"] as float?;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="refresh" content="15">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/EJ2/fluent.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/EJ2/grouping.css" rel="stylesheet" />
+    <style>
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-links {
+            font-size: 1.1em;
+            padding: 10px 15px;
+            text-decoration: none;
+        }
+
+
+        .nav-item:hover .nav-links {
+            background-color: cornflowerblue;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar {
+            background-color: #001845;
+        }
+
+
+        .e-header-text-hello:hover {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        #clock {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                color: #555; /* Text color for labels */
+            }
+
+            .form-group button {
+                width: 10%;
+                padding: 12px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 25px;
+                font-size: 18px; /* Reduced font size */
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s ease; /* Smooth transition for background color change */
+            }
+
+                .form-group button:hover {
+                    background-color: aliceblue; /* Darker background color on hover */
+                }
+    </style>
+</head>
+<body>
+    <div>
+        <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark ">
+            <div class="container-fluid">
+                <img src="data:image/png;base64,@ViewData["TeamAIcon"]" height="70" style="margin-right:30px; " />
+                @Html.ActionLink(teamAName + " INNINGS", "LiveMatch", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav w-100 d-flex justify-content-center" style="color:white; margin-right:10%">
+                        <li class="nav-item">
+                            @Html.ActionLink("Admin Dashboard", "AdminDashboard", "DashboardLayout", new { area = "" }, new { @class = "nav-links", style = "font-weight: bold; color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Players", "ViewPlayer", "ViewPlayer", new { area = "" }, new { @class = "nav-links", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Teams", "ViewTeam", "ViewTeam", new { area = "" }, new { @class = "nav-links", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Matches", "MatchScheduling", "Index", new { area = "" }, new { @class = "nav-links", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Match Filter", "MatchFilter", "MatchFilter", new { area = "" }, new { @class = "nav-links", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink(teamAName + " Innings", "Batting", "Cricket", new { id = Convert.ToInt32(ViewData["ID"]), area = "" }, new { @class = "nav-links", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink(teamBName + " Innings", "Bowling", "Cricket", new { id = Convert.ToInt32(ViewData["ID"]), area = "" }, new { @class = "nav-links", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Back", "Livematch", "Cricket", new { area = "" }, new { @class = "nav-links", style = "color:white" })
+                        </li>
+                    </ul>
+                </div>
+                <div id="clock"></div>
+            </div>
+        </nav>
+    </div>
+
+   <br />
+
+    <div id="Batting_Innings">
+        @Html.EJS().DashboardLayout("TeamA_Dashboard").Columns(10).ContentTemplate(
+        @<div>
+            <div id="panel1" class="e-panel" data-row="0" data-col="0" data-sizeX="5" data-sizeY="4">
+                <div class="e-panel-header" style=" display: flex; background-color:#001845; justify-content: space-between; align-items: center; height: 10%; font-size: 18px; font-weight: bold;">
+                    <div class="e-header-text" style="font-weight: bold; ">
+                        <img src="data:image/png;base64,@ViewData["TeamAIcon"]" style=" width: 70px; height: 40px; margin-bottom:7px;" />
+                        <span style="padding-left:10px;color:aliceblue; font-size:30px">@ViewData["TeamAName"].ToString().ToUpper()</span>
+                    </div>
+                    <div class="e-header-text" style="font-weight: bold; padding:10px">
+                        <div style="font-weight: bold;">
+                            <span style="color:aliceblue">@ViewData["Runs"]/@ViewData["Outs"]  <span style="font-size:17px;">  (OVERS: @overs)</span> </span>
+                            <div style="font-size:15px; margin-left:2%">
+                                <span style="font-weight:bold; color:aliceblue">CRR: @ViewData["CRR"] rpo</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="e-panel-container" style="font-size:20px; margin-top:1%">
+                    @Html.Partial("~/Views/NewMatchPartialViews/_BATTING.cshtml", ViewData)
+                </div>
+                <div class="e-panel-footer" style="font-size: 20px; background-color: #f5f5f5; color: #001845; padding:10px; border-top: 1px solid #ccc;">
+                    <img src="~/Content/Images/bat2.png" style="height:30px" />
+                    <span style="font-weight: bold; ">BATTING</span>
+                    <span style="font-weight:bold; color:dimgrey; margin-left:35.6%">R</span>
+                    <span style="font-weight:bold; color:dimgrey; margin-left:6.6%">B</span>
+                    <span style="font-weight:bold; color:dimgrey; margin-left:5.8%">4S</span>
+                    <span style="font-weight:bold; color:dimgrey; margin-left:5.4%">6S</span>
+                    <span style="font-weight:bold; color:dimgrey; margin-left:6%">S/R</span>
+                </div>
+            </div>
+
+            <div id="panel4" class="e-panel" data-row="0" data-col="5" data-sizeX="5" data-sizeY="4">
+                <div class="e-panel-header" style=" display: flex; background-color: #001845; color:black; justify-content: space-between; align-items: center; height: 10%; font-size: 18px; font-weight: bold;">
+                    <div class="e-header-text" style="font-weight: bold; ">
+                        <img src="data:image/png;base64,@ViewData["TeamBIcon"]" style=" width: 70px; height: 40px; margin-bottom: 7px; " />
+                        <span style="padding-left: 10px; color: aliceblue; font-size: 30px">@ViewData["TeamBName"].ToString().ToUpper()</span>
+                    </div>
+                </div>
+                <div class="e-panel-container" style="font-size:20px">
+                    @Html.Partial("~/Views/NewMatchPartialViews/_BOWLING.cshtml", ViewData)
+                </div>
+                <div class="e-panel-footer" style="font-size: 20px; background-color: #f5f5f5; color: #001845; padding: 10px; border-top: 1px solid #ccc; ">
+                    <img src="~/Content/Images/ball2.png" style="height:30px" />
+                    <span style="font-weight:bold">BOWLING</span>
+                    <span style="font-weight:bold; color:dimgrey; margin-left:37%">B</span>
+                    <span style="font-weight:bold; color:dimgrey; margin-left:6.6%">M</span>
+                    <span style="font-weight:bold; color:dimgrey; margin-left:5.8%">R</span>
+                    <span style="font-weight:bold; color:dimgrey; margin-left:5.4%">W</span>
+                    <span style="font-weight:bold; color:dimgrey; margin-left:6%">ECO</span>
+                </div>
+            </div>        
+    </div>).Render()
+    </div>
+
+    <script>
+        function updateTime() {
+            let now = new Date();
+            let hours = String(now.getHours()).padStart(2, '0');
+            let minutes = String(now.getMinutes()).padStart(2, '0');
+            let seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+
+    @{
+        teamA = null;
+        teamB = null;
+        teamAName = null;
+        teamBName = null;
+        overs = null;
+        ViewData["TeamAName"] = null;
+        ViewData["TeamBName"] = null;
+        ViewData["TeamAIcon"] = null;
+        ViewData["TeamBIcon"] = null;
+        ViewData["TeamAShortName"] = null;
+        ViewData["TeamBShortName"] = null;
+        ViewData["ID"] = null;
+        ViewData["Runs"] = null;
+        ViewData["Outs"] = null;
+        ViewData["Balls"] = null;
+        ViewData["CRR"] = null;
+        ViewData["NO"] = null;
+        ViewData["WIDE"] = null;
+        ViewData["BYE"] = null;
+        ViewData["LEGBYE"] = null;
+        ViewData["PENALTY"] = null;
+
+        if (ViewData["BATTING"] is List<Vispl.Training.Crickinfo.VO.BATTING_VO> batting && ViewData["BATTING"] != null)
+        {
+            batting.Clear();
+            batting = null;
+            ViewData["BATTING"] = null;
+        }
+
+        if (ViewData["BOWLING"] is List<Vispl.Training.Crickinfo.VO.BOWLING_VO> bowling && ViewData["BOWLING"] != null)
+        {
+            bowling.Clear();
+            bowling = null;
+            ViewData["BOWLING"] = null;
+        }
+    }
+</body>
+</html >

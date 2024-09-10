@@ -1,0 +1,162 @@
+﻿@model Vispl.Training.Crickinfo.VO.MatchFilter_VO
+
+@{
+    ViewBag.Title = "Match Filter";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var navbarColor = (TempData["kaun"] as string == "user") ? "cadetblue" : "royalblue";
+    var buttonStyle = $"background-color: {navbarColor};";
+}
+
+<style>
+
+    .navbar-brand {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+
+    .nav-link {
+        font-size: 1.1em;
+        padding: 10px 15px;
+    }
+
+
+    .nav-item:hover .nav-link {
+        background-color: #007bff;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .main-container {
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        background-color: lightblue;
+    }
+
+    .login-container h2 {
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333; /* Text color for the heading */
+    }
+
+    .form-group {
+        margin-bottom: 100px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #555; /* Text color for labels */
+        }
+
+        .form-group button {
+            width: 20%;
+            padding: 12px;
+            
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px; /* Reduced font size */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+        }
+
+            .form-group button:hover {
+                background-color: aliceblue; /* Darker background color on hover */
+            }
+
+    .timepass {
+        border: 2px dashed #007bff; /* Add a dashed border */
+        border-radius: 10px;
+    }
+</style>
+
+<nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark" style="background-color: @navbarColor">
+    <div class="container-fluid">
+        <img src="~/Content/Images/m.png" height="120" style="margin-right:1%" />
+        @Html.ActionLink("MATCH FILTER", "MatchFilter", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-lg-auto">
+                <li class="nav-item">
+                    @Html.ActionLink("BACK", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                </li>
+                <li class="nav-item">
+                    @Html.ActionLink("VIEW", "ViewMatches", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<body>
+
+    <div class="text-danger">
+        <br />
+        @Html.ValidationSummary()
+    </div>
+
+    <div class="timepass" style="margin-top:3%; max-width:90%; margin-left:4% ">
+        @using (Html.BeginForm("MatchFilter","Cricket",FormMethod.Post))
+        {
+            <div class="form-group" style="margin-left:33.5%; margin-top:6%">
+                <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                    @Html.LabelFor(model => model.MatchFrom)
+                    <span style="color: red; margin-left: 5px;">*</span>
+                </div>
+                @Html.Partial("~/Views/_dateTimeZone1.cshtml", Model)
+            </div>
+
+            <div class="form-group" style="margin-left:33.5%">
+                <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                    @Html.LabelFor(model => model.MatchTo)
+                    <span style="color: red; margin-left: 5px;">*</span>
+                </div>
+                @Html.Partial("~/Views/_dateTimeZone2.cshtml", Model)
+            </div>
+
+            <div class="form-group" style="text-align:center;margin-top:100px">
+                @Html.EJS().Button("button").Content("FILTER RESULTS").IsPrimary(true).HtmlAttributes(new Dictionary<string, object>
+                    { { "onclick", "submitForm()" }, { "type", "button" },{"style", buttonStyle } }).Render()
+            </div>
+        }
+    </div>
+
+
+    <script>
+        function submitForm() {
+            var matchFrom = document.getElementById("MatchFrom");
+            var matchFromOffset = document.getElementById("MatchFromOffset").ej2_instances[0];
+            var matchTo = document.getElementById("MatchTo");
+            var matchToOffset = document.getElementById("MatchToOffset").ej2_instances[0];
+
+
+
+            if (matchFrom.value === null || matchFrom.value === "") {
+                alert("Select the Match-Start Date");
+                matchFrom.focus();
+            }
+            else if (matchFromOffset.value === "" || matchFromOffset.value === null) {
+                alert("Select the Time Zone for Match-Start Date.");
+                matchFromOffset.focus();
+            }
+            else if (matchTo.value === null || matchTo.value === "") {
+                alert("Select the Match-End Date");
+                matchTo.focus();
+            }
+            else if (matchToOffset.value === null || matchToOffset.value === "") {
+                alert("Select the Time Zone for Match-End Date");
+            }
+            else {
+                document.forms[0].submit()
+            }
+        }
+    </script>
+</body>

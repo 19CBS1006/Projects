@@ -1,0 +1,48 @@
+﻿@{
+    var overs = ViewData["Balls"] as float?;
+    var sum = Convert.ToInt32(ViewData["NO"]) + Convert.ToInt32(ViewData["WIDE"]) + Convert.ToInt32(ViewData["BYE"]) + Convert.ToInt32(ViewData["LEGBYE"]) + Convert.ToInt32(ViewData["PENALTY"]);
+}
+
+@using Syncfusion.EJ2.Grids
+
+@(Html.EJS().Grid("grid-data-1").DataSource(ViewData["BATTING"] as List<Vispl.Training.Crickinfo.VO.BATTING_VO>).AllowMultiSorting(true).Columns(col =>
+{
+    col.Field("BatsmanPicture").HeaderText("").Template("<img src=\"data:image/png;base64,${BatsmanPicture}\" style=\"width:40px;height:40px;border-radius:50%;\" />").Width(20).AllowSearching(false).AllowFiltering(false).Add();
+    col.Field("BatsmanName").HeaderText("").Template(
+        "<div style='font-weight:bold; font-size:17px'>${BatsmanName}<br/><span style='color:gray; font-size:14px; font-weight:normal'>${BowlerName}</span></div>"
+    ).Width("40").AllowSearching(true).Add();
+    col.Field("TotalRuns").HeaderText("").Template("<span style='font-weight:bold; font-size:17px;'>${TotalRuns}</span>").Width("10").AllowSearching(true).Add();
+    col.Field("TotalBalls").HeaderText("").Template("<span style='font-weight:bold; font-size:17px;'>${TotalBalls}</span>").Width("10").AllowSearching(true).Add();
+    col.Field("FOUR").HeaderText("").Template("<span style='font-weight:bold; font-size:17px;'>${FOUR}</span>").Width("10").AllowSearching(true).Add();
+    col.Field("SIX").HeaderText("").Template("<span style='font-weight:bold; font-size:17px;'>${SIX}</span>").Width("10").AllowSearching(true).Add();
+    col.Field("StrikeRate").HeaderText("").Template("<span style='font-weight:bold; font-size:17px;'>${StrikeRate}</span>").Width("15").AllowSearching(true).Add();
+})
+.LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+.AllowSorting()
+.Width(910)
+.RowHeight(45)
+.Height(500)
+.AllowTextWrap()
+.EnableHover()
+.Render())
+
+<style>
+    #grid-data-1 .e-gridheader {
+        display: none;
+    }
+</style>
+
+<div style="padding: 10px; font-size: 15px; display: flex; font-weight:normal; color:#001845">
+    <span style="font-weight:bold">Extras  </span>
+    <span style="color: gray; margin-left: 10px;"> @Convert.ToInt32(ViewData["NO"])nb </span>
+    <span style="color: gray; margin-left: 6px;">@Convert.ToInt32(ViewData["WIDE"])wd </span>
+    <span style="color: gray; margin-left: 6px;">@Convert.ToInt32(ViewData["BYE"])b </span>
+    <span style="color: gray; margin-left: 6px;">@Convert.ToInt32(ViewData["LEGBYE"])lb </span>
+    <span style="color: gray; margin-left: 6px;">@Convert.ToInt32(ViewData["PENALTY"])p </span>
+    <span style="color: black; margin-left: auto; margin-right:2%; font-weight:bold; font-size:15px">@sum </span>
+</div>
+
+<div style="background-color: #001845; color: white; padding: 10px; border-radius: 3px; font-size: 17px; display: flex; ">
+    <span style="font-weight:bold">TOTAL:  @overs OVERS</span>
+    <span style="font-weight:bold; margin-left:auto; margin-right:2%">@ViewData["Runs"]</span>
+</div>

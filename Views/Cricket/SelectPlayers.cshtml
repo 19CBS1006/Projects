@@ -1,0 +1,388 @@
+﻿@model Vispl.Training.Crickinfo.VO.SelectPlayers_VO
+@using Syncfusion.EJ2.DropDowns
+
+@{
+    var teamA = ViewData["TeamAName"] as string;
+    var shortA = ViewData["TeamAShortName"] as string;
+    var logoA = ViewData["TeamAIcon"] as string;
+    var shortB = ViewData["TeamBShortName"] as string;
+    var teamB = ViewData["TeamBName"] as string;
+    var logoB = ViewData["TeamBIcon"] as string;
+    var type = ViewData["MatchType"] as string;
+    var venue = ViewData["MatchVenue"] as string;
+    var timings = ViewData["MatchTimings"] as string;
+    var match = ViewData["MatchID"] as int?;
+    var battingID = ViewData["BattingTeamID"] as int?;
+    var bowlingID = ViewData["BowlingTeamID"] as int?;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title =  shortA + " vs " + shortB + " - Playing Selection";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+        .container-1 {
+            padding: 40px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-link {
+            font-size: 1.1em;
+            padding: 10px 15px;
+        }
+
+
+        .nav-item:hover .nav-link {
+            background-color: cornflowerblue;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar {
+            background-color: skyblue;
+        }
+
+
+        .e-header-text-hello:hover {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        #clock {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            font-size:15px
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                color: #555; /* Text color for labels */
+            }
+
+            .form-group button {
+                width: 100%;
+                padding: 12px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 10px;
+                font-size: 18px; /* Reduced font size */
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.2s ease; /* Smooth transition for background color change */
+            }
+
+                .form-group button:hover {
+                    background-color: wheat; 
+                } 
+    </style>
+</head>
+<body>
+    <div>
+        <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark ">
+            <div class="container-fluid">
+                <img src="~/Content/Images/a2.png" height="70" style="margin-right:30px" />
+                @Html.ActionLink($"SELECT PLAYERS", "SelectPlayers", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav w-100 d-flex justify-content-center" style="color:white; margin-right:10%">
+                        <li class="nav-item">
+                            @Html.ActionLink("Admin Dashboard", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link", style = "font-weight: bold; color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Players", "ViewPlayers", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Teams", "ViewTeams", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Matches", "ViewMatches", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Match Filter", "MatchFilter", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Logout", "UserPage", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                    </ul>
+                </div>
+                <div id="clock"></div>
+            </div>
+        </nav>
+    </div>
+
+    <br />
+
+    <div>
+        @using (Html.BeginForm("SelectPlayers", "Cricket", FormMethod.Post, new { id = "myForm" }))
+        {
+            <div class="form-group" style="background-color:aliceblue;padding:10px">
+                <div style="display: flex; justify-content: flex-end; position: absolute; right: 1%;">
+                    @Html.EJS().Button("Submit").Content("START MATCH").HtmlAttributes(new Dictionary<string, object> { { "onclick", "return submitForm()" } }).Render()
+                </div>
+                <div>
+                    Batting Team: <span style="font-weight:bold">@teamA</span>
+                </div>
+                <div>
+                    Bowling Team: <span style="font-weight:bold">@teamB</span>
+                </div>
+                <div >
+                    MATCH DETAILS: 
+                    <span style="font-weight:bold; margin-left:7px; margin-right:10px">
+                        @timings
+                    </span>
+                    <span style="color:dimgray; margin-right:10px; font-weight:bold">
+                        @venue
+                    </span>
+                    <span style="font-weight:bold; margin-right:10px">
+                        @type
+                    </span>
+                </div>
+                
+                
+            </div>
+            
+            <div class="text-danger">
+                @Html.ValidationSummary()
+            </div>
+
+            @Html.HiddenFor(model => model.MatchID, new { name = "MatchID" })
+            @Html.HiddenFor(model => model.BattingTeamID, new { name = "BattingTeamID" })
+            @Html.HiddenFor(model => model.BowlingTeamID, new { name = "BowlingTeamID" })
+
+            <script>
+                var mid = '@match';
+                var batID = '@battingID';
+                var bowlID = '@bowlingID';
+
+                document.getElementById("MatchID").value = mid
+                document.getElementById("BattingTeamID").value = batID;
+                document.getElementById("BowlingTeamID").value = bowlID;
+            </script>
+
+            @Html.EJS().DashboardLayout("layout").Columns(6).ContentTemplate(
+                    @<div>
+                        <div id="panel1" class="e-panel" data-row="0" data-col="0" data-sizeX="3" data-sizeY="2">
+                            <div class="e-panel-header" style=" display: flex; justify-content: space-between; align-items: center; height: 12%; font-size: 18px; font-weight: bold; background-color:lightcyan ">
+                                <div class="e-header-text" style="font-weight: bold;">
+                                    <a href="@Url.Action("ViewPlayers", "Cricket")">
+                                        <img src="data:image/png;base64,@logoA" style="width:55px;height:50px;border-radius:50%;" />
+                                        @Html.ActionLink(teamA + " (" + shortA + ")", "ViewPlayers", "Cricket", null, new { style = "color: black; text-decoration: none;" })
+                                    </a>
+                                </div>
+
+                                <div class="e-header-text" style="font-weight: bold; margin-right:1.5%">
+                                    <span style="color:lightgrey">BATTING TEAM</span>
+                                </div>
+                            </div>
+                            <div class="e-panel-container" style="align-items: center; border: 1px dashed lightcyan; height:88%">
+                                <div class="container-1">
+                                    <div class="form-group" style="margin-top:4%">
+                                        <div class="col-md-2 control-label">
+                                            @Html.LabelFor(model => model.BattingPlayers)
+                                        </div>
+                                        <div style="margin-bottom:5%">
+                                            @Html.EJS().MultiSelectFor(model => model.BattingPlayers).Change("helloBatting").DataSource(ViewData["TeamAPlayers"] as List<object>).Mode(VisualMode.CheckBox).ShowDropDownIcon(true).ShowSelectAll(true).Fields(new MultiSelectFieldSettings { Text = "Text", Value = "Value" }).Placeholder("Select the Playing 11").Width("40%").Render()
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-2 control-label">
+                                            @Html.LabelFor(model => model.Striker)
+                                        </div>
+                                        <div style="margin-bottom:5%">
+                                            @Html.EJS().DropDownListFor(model => model.Striker).DataSource(ViewData["TeamAPlayers"]).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).Value("").Placeholder("Select the Striker").Width("40%").Render()
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-2 control-label">
+                                            @Html.LabelFor(model => model.NonStriker)
+                                        </div>
+                                        <div style="margin-bottom:5%">
+                                            @Html.EJS().DropDownListFor(model => model.NonStriker).DataSource(ViewData["TeamAPlayers"]).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).Value("").Placeholder("Select the Non-Striker").Width("40%").Render()
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-2 control-label">
+                                            @Html.LabelFor(model => model.BattingTeamCaptain)
+                                        </div>
+                                        <div>
+                                            @Html.EJS().DropDownListFor(model => model.BattingTeamCaptain).DataSource(ViewData["TeamAPlayers"]).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).Value("").Placeholder("Select the Team Captain").Width("40%").Render()
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="panel2" class="e-panel" data-row="0" data-col="4" data-sizeX="3" data-sizeY="2">
+                            <div class="e-panel-header" style=" display: flex; justify-content: space-between; align-items: center; height: 12%; font-size: 18px; font-weight: bold; background-color: lightgoldenrodyellow;">
+                                <div class="e-header-text" style="font-weight: bold;">
+                                    <a href="@Url.Action("ViewPlayers", "Cricket", new { area = "" })">
+                                        <img src="data:image/png;base64,@logoB" style="width:55px;height:50px;border-radius:50%;" />
+                                        @Html.ActionLink(teamB + " (" + shortB + ")", "ViewMatches", "Cricket", null, new { style = "color: black; text-decoration: none;" })
+                                    </a>
+                                </div>
+                                <div class="e-header-text" style="font-weight: bold; margin-right:1.5%">
+                                    <span style="color:lightgrey">BOWLING TEAM</span>
+                                </div>
+                            </div>
+                            <div class="e-panel-container" style="align-items: center; border: 1px dashed lightgoldenrodyellow; height:88%">
+                                <div class="container-1">
+                                    <div class="form-group">
+                                        <div class="col-md-2 control-label" style="margin-top:7%">
+                                            @Html.LabelFor(model => model.BowlingPLayers)
+                                        </div>
+                                        <div style="margin-bottom:5%">
+                                            @Html.EJS().MultiSelectFor(model => model.BowlingPLayers).DataSource(ViewData["TeamBPlayers"] as List<object>).Change("helloBowling").Mode(VisualMode.CheckBox).ShowDropDownIcon(true).ShowSelectAll(true).Fields(new MultiSelectFieldSettings { Text = "Text", Value = "Value" }).Placeholder("Select the Playing 11").Width("40%").Render()
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-2 control-label">
+                                            @Html.LabelFor(model => model.Bowler)
+                                        </div>
+                                        <div style="margin-bottom:5%">
+                                            @Html.EJS().DropDownListFor(model => model.Bowler).DataSource(ViewData["TeamBPlayers"]).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).Value("").Placeholder("Select the Bowler").Width("40%").Render()
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="col-md-2 control-label">
+                                            @Html.LabelFor(model => model.BallingTeamCaptain)
+                                        </div>
+                                        <div>
+                                            @Html.EJS().DropDownListFor(model => model.BallingTeamCaptain).DataSource(ViewData["TeamBPlayers"]).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).Value("").Placeholder("Select the Bowler").Width("40%").Render()
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>).Render()
+        }
+
+
+    </div>
+
+    <script type="text/javascript">
+
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        let battingPlayersTrue = false;
+        let bowlingPlayersTrue = false;
+
+
+        function helloBatting(args)
+        {
+            let multiSelect = document.getElementById('BattingPlayers').ej2_instances[0];
+            let PLAYERSLENGTH = multiSelect.value.length;
+
+            if (PLAYERSLENGTH === 11)
+            {
+                battingPlayersTrue = true;
+            }
+            else
+            {
+                battingPlayersTrue = false;
+            }
+        }
+        function helloBowling(args)
+        {
+            let multiSelect1 = document.getElementById('BowlingPLayers').ej2_instances[0];
+            let PLAYERSLENGTH = multiSelect1.value.length;
+
+            if (PLAYERSLENGTH === 11)
+            {
+                bowlingPlayersTrue = true;
+            }
+            else
+            {
+                bowlingPlayersTrue = false;
+            }
+        }
+        function submitForm()
+        {
+            @*let striker = document.getElementById("Striker").value;
+            let nonstriker = document.getElementById("NonStriker").value;
+            let captain = document.getElementById("BattingTeamCaptain").value;
+            let bat = '@shortA';
+            let bowl = '@shortB';
+            let bowler = document.getElementById("Bowler").value;
+            let bowlingcaptain = document.getElementById("BallingTeamCaptain").value;
+
+            if (battingPlayersTrue == false) {
+                alert("Please select playing 11 for " + bat);
+                return false;
+            }
+            else if (striker === "") {
+                alert("Please select Striker.");
+                return false;
+            }
+            else if (nonstriker === "") {
+                alert("Please select the Non-Striker");
+                return false;
+            }
+            else if (captain === "") {
+                alert("Please select the Captain for " + bat);
+                return false;
+            }
+            else if (bowlingPlayersTrue == false) {
+                alert("Please select playing 11 for " + bowl);
+                return false;
+            }
+            else if (bowler === "") {
+                alert("Please select the Bowler");
+                return false;
+            }
+            else if (bowlingcaptain === "") {
+                alert("Please select the Captain for " + bowl);
+                return false;
+            }
+            else if (battingPlayersTrue == true && bowlingPlayersTrue == true && striker != "" && nonstriker != "" && captain != "" && bowler != "" && bowlingcaptain != "") {
+                let answer = confirm("Are you sure you want to continue?");
+                if (!answer) {
+                    return false;
+                }
+                else {
+                    return true;
+                }
+            }
+            else {
+                return false;
+            }*@
+
+            return true;
+        }
+    </script>
+
+    <script>
+        
+    </script>
+</body>
+</html>

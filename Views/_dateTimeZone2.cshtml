@@ -1,0 +1,10 @@
+﻿@model Vispl.Training.Crickinfo.VO.MatchFilter_VO
+@using Syncfusion.EJ2.Inputs
+@using Syncfusion.EJ2.DropDowns
+
+
+
+<span>
+    @Html.EJS().DateTimePicker("MatchTo").Format("dd-MM-yyyy HH:mm:ss").Placeholder("Select Match-End Date").Width("30%").ShowClearButton().Render()
+    @Html.EJS().DropDownList("MatchToOffset").DataSource(ViewData["Zones"] as List<object>).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).ShowClearButton().Value("").Placeholder("Select TimeZone").Width("30%").Render()
+</span>

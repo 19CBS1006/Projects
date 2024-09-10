@@ -1,0 +1,136 @@
+﻿@using Syncfusion.EJ2
+
+    @{
+        ViewBag.Title = "Player Details";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        var adminPageUrl = @Url.Action("AdminPage", "Cricket");
+        var navbarColor = (Session["User"] as string == "user") ? "cadetblue" : "royalblue";
+
+    }
+
+    <style>
+        body {
+            background-color: white
+        }
+
+        .login-container h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #333; /* Text color for the heading */
+        }
+
+        .navbar-brand {
+            font-size: 1.5em;
+            font-weight: bold;
+
+        }
+
+
+        .nav-link {
+            font-size: 1.1em;
+            padding: 10px 15px;
+        }
+
+
+        .nav-item:hover .nav-link {
+            background-color: #007bff;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                color: #555; /* Text color for labels */
+            }
+
+            .form-group button {
+                width: 10%;
+                padding: 12px;
+                margin-right: 5%;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 25px;
+                font-size: 18px; /* Reduced font size */
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s ease; /* Smooth transition for background color change */
+            }
+
+                .form-group button:hover {
+                    background-color: aliceblue; /* Darker background color on hover */
+                }
+    </style>
+
+    <body style="background-color:azure">
+        <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark" style="background-color: @navbarColor">
+            <div class="container-fluid">
+                <img src="~/Content/Images/g.png" height="100" style="margin-right:2%"/>
+                @Html.ActionLink("PLAYERS", "TeamAdd", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-lg-auto">
+                        <li class="nav-item">
+                            @Html.ActionLink("BACK", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("VIEW TEAMS", "ViewTeams", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <br />
+        <div>
+            <div class="main-container">
+                @(Html.EJS().Grid("Overview").DataSource((IEnumerable<Vispl.Training.Crickinfo.VO.Player_VO>) ViewData["PlayerDetails"])
+    .EnableVirtualization()
+    .AllowSorting()
+    .AllowMultiSorting(true)
+    .Columns(col =>
+    {
+        col.Field("ProfilePicture").HeaderText("")
+           .Template("<img src=\"data:image/png;base64,${picture}\" style=\"width:60px;height:60px;border-radius:50%;\" />")
+           .Width(100).AllowFiltering(false).Add();
+        col.Field("Jersey").HeaderText("Jersey Number").Width("150").AllowSearching(true).Add();
+        col.Field("FirstName").HeaderText("First Name").Width("150").AllowSearching(true).Add();
+        col.Field("MiddleName").HeaderText("Middle Name").Width("150").AllowSearching(true).Add();
+        col.Field("LastName").HeaderText("Last Name").Width("150").AllowSearching(true).Add();
+        col.Field("DOB").HeaderText("D.O.B").Format("dd-MM-yyyy").Width("150").AllowSearching(true).Add();
+        col.Field("Age").HeaderText("Age").Width("150").AllowSearching(true).Add();
+        col.Field("BirthPlace").HeaderText("Birth Place").Width("150").AllowSearching(true).Add();
+        col.Field("IsCaptain").HeaderText("Captain").Width("150").AllowSearching(true).Add();
+        col.Field("IsSubstitute").HeaderText("Substitute").Width("150").AllowSearching(true).Add();
+        col.Field("Franchise").HeaderText("Franchise").Width("150").AllowSearching(true).Add();
+        col.Field("MatchesPlayed").HeaderText("Matches Played").Width("150").AllowSearching(true).Add();
+        col.Field("RunsScored").HeaderText("Runs Scored").Width("150").AllowSearching(true).Add();
+        col.Field("WicketsTaken").HeaderText("Wickets Taken").Width("150").AllowSearching(true).Add();
+        col.Field("Centuries").HeaderText("Centuries").Width("150").AllowSearching(true).Add();
+        col.Field("HalfCenturies").HeaderText("Half Centuries").Width("150").AllowSearching(true).Add();
+        col.Field("DebutDate").Format("dd-MM-yyyy").HeaderText("Debut Date").Width("150").AllowSearching(true).Add();
+        col.Field("ICCRanking").HeaderText("ICC Ranking").Width("150").AllowSearching(true).Add();
+        col.Field("Country").HeaderText("Nationality").Width("150").AllowSearching(true).Add();
+        col.Field("Position").HeaderText("Player-Type").Width("150").AllowSearching(true).Add();
+    })
+    .AllowFiltering(true)
+    .AllowPaging(true)
+    .Height(500)
+    .AllowTextWrap()
+    .EnableHover()
+    .LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+    .Render()
+)
+
+            </div>
+        </div>
+    </body>

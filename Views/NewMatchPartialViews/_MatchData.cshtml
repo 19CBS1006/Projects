@@ -1,0 +1,26 @@
+﻿@using Syncfusion.EJ2
+
+@{ 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var Data = TempData["LiveMatch"];
+}
+
+
+<div class="main-container">
+    @(Html.EJS().Grid("LiveMatchData").DataSource((IEnumerable<Vispl.Training.Crickinfo.VO.Match_VO>)Data).AllowMultiSorting(true).Columns(col =>
+{
+    col.Field("Team_A").Width("150").AllowSearching(true).Add();
+    col.Field("Team_B").Width("150").AllowSearching(true).Add();
+    col.Field("MatchVenue").Width("150").AllowSearching(true).Add();
+    col.Field("MatchType").Width("150").AllowSearching(true).Add();
+    col.Field("MatchTimings").HeaderText("").Width("150").AllowSearching(true).Add();
+})
+        .LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+    .AllowSorting()
+    .Height(100)
+    .AllowTextWrap()
+    .EnableHover()
+
+    .Render()
+    )
+</div>

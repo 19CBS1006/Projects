@@ -1,0 +1,23 @@
+﻿@using Syncfusion.EJ2
+
+@{
+    ViewBag.Title = "Player Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teamDetails = (IEnumerable<Vispl.Training.Crickinfo.VO.Match_VO>)ViewData["MatchDetails"];
+}
+
+<div class="main-container">
+    @(Html.EJS().Grid<Vispl.Training.Crickinfo.VO.Match_VO>("MatchOverview")
+    .DataSource((IEnumerable<Vispl.Training.Crickinfo.VO.Match_VO>)teamDetails)
+    .AllowMultiSorting(true)
+    .Columns(col =>
+    {
+        col.Field("Team_A").HeaderText("Team A").Width("120").AllowSearching(true).Add();
+        col.Field("Team_B").HeaderText("Team B").Width("100").AllowSearching(true).Add();
+        col.Field("MatchVenue").HeaderText("Venue").Width("210").AllowSearching(true).Add();
+        col.Field("MatchType").HeaderText("Type").Width("150").AllowSearching(true).Add();
+        col.Field("MatchTimings").HeaderText("Date").Format("dd-MM-yyyy").Width("150").AllowSearching(true).Add();
+        col.Template("<a href='" + @Url.Action("NewMatch", "Cricket") + "?ID=${MatchId}'>VIEW DETAILS</a>").HeaderText("").Width("150").Add();
+        })
+        .Render())
+</div>

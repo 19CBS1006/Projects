@@ -1,0 +1,40 @@
+﻿@using Syncfusion.EJ2
+
+@{
+    ViewBag.Title = "Player Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teamDetails = (IEnumerable<Vispl.Training.Crickinfo.VO.Player_VO>)ViewData["PlayerDetails"];
+}
+
+<div class="main-container">
+    @(Html.EJS().Grid("Overview").DataSource((IEnumerable<Vispl.Training.Crickinfo.VO.Player_VO>)teamDetails).FilterSettings(filter => filter.Type(Syncfusion.EJ2.Grids.FilterType.Menu)).Columns(col =>
+{
+    col.Field("ProfilePicture").HeaderText("Profile Picture").Template("<img src=\"data:image/png;base64,${picture}\" style=\"width:60px;height:60px;border-radius:10%;\" />").Width(130).Add();
+    col.Field("Jersey").HeaderText("Jersey").Width("100").AllowSearching(true).Add();
+    col.Field("FirstName").HeaderText("First Name").Width("100").AllowSearching(true).ClipMode(Syncfusion.EJ2.Grids.ClipMode.EllipsisWithTooltip).Add();
+    col.Field("MiddleName").HeaderText("Middle Name").Width("130").AllowSearching(true).ClipMode(Syncfusion.EJ2.Grids.ClipMode.EllipsisWithTooltip).Add();
+    col.Field("LastName").HeaderText("Last Name").Width("100").AllowSearching(true).ClipMode(Syncfusion.EJ2.Grids.ClipMode.EllipsisWithTooltip).Add();
+    col.Field("DOB").HeaderText("Date of Birth").Format("dd-MM-yyyy").Width("130").AllowSearching(true).Add();
+    col.Field("Age").HeaderText("Age").Width("100").AllowSearching(true).Add();
+    col.Field("BirthPlace").HeaderText("Birth Place").Width("100").AllowSearching(true).ClipMode(Syncfusion.EJ2.Grids.ClipMode.EllipsisWithTooltip).Add();
+    col.Field("IsCaptain").HeaderText("Captain").Width("100").Add();
+    col.Field("Franchise").HeaderText("Franchise").Width("100").ClipMode(Syncfusion.EJ2.Grids.ClipMode.EllipsisWithTooltip).Add();
+    col.Field("MatchesPlayed").HeaderText("Matches Played").Width("130").ClipMode(Syncfusion.EJ2.Grids.ClipMode.EllipsisWithTooltip).Add();
+    col.Field("RunsScored").HeaderText("Runs Scored").Width("130").ClipMode(Syncfusion.EJ2.Grids.ClipMode.EllipsisWithTooltip).Add();
+    col.Field("WicketsTaken").HeaderText("Wickets Taken").Width("130").ClipMode(Syncfusion.EJ2.Grids.ClipMode.EllipsisWithTooltip).Add();
+    col.Field("Centuries").HeaderText("Centuries").Width("100").Add();
+    col.Field("HalfCenturies").HeaderText("Half Centuries").Width("130").Add();
+    col.Field("DebutDate").Format("dd-MM-yyyy").HeaderText("Debut Date").Width("130").Add();
+    col.Field("ICCRanking").HeaderText("ICC Ranking").Width("130").Add();
+    col.Field("Country").HeaderText("Nationality").Width("100").ClipMode(Syncfusion.EJ2.Grids.ClipMode.EllipsisWithTooltip).Add();
+    col.Field("Position").HeaderText("Player-Type").Width("130").ClipMode(Syncfusion.EJ2.Grids.ClipMode.EllipsisWithTooltip).Add();
+})
+        .LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+    .AllowSorting()
+    .Height(470)
+    .AllowTextWrap()
+    .EnableHover()
+
+    .Render()
+    )
+</div>

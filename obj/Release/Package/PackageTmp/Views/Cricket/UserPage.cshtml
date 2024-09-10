@@ -1,0 +1,110 @@
+﻿@using Syncfusion.EJ2
+@{
+    ViewBag.Title = "User Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .navbar {
+        background-color: cadetblue;
+        color:wheat;
+    }
+
+    .navbar-brand {
+        font-size: 1.5em;
+    }
+
+        .navbar-brand:hover {
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+
+    .nav-link {
+        font-size: 1.1em;
+        padding: 10px 15px;
+    }
+
+    .nav-link:hover {
+        background-color:aquamarine;
+        color: black;
+        transition: background-color 0.3s ease;
+    }
+</style>
+
+<body style="background-color:lightcyan">
+
+    <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark" >
+        <div class="container-fluid">
+            <img src="~/Content/Images/e.png" style="height: 180px;" />
+
+            @Html.ActionLink("CRICKET SCOREBOARD", "UserPage", "Cricket", new { area = "" }, new { @class = "navbar-brand", style = "color: wheat; font-size:25px" })
+
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav  ms-lg-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("Dashboard", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color: wheat;" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Players", "ViewPlayers", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color: wheat;" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Teams", "ViewTeams", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color: wheat;" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Matches", "ViewMatches", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color: wheat;" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Match Filter", "MatchFilter", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color: wheat;" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("Login", "Login", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color: wheat;" })
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <br />
+
+    <div>
+        @Html.EJS().DashboardLayout("layout").Columns(6).ContentTemplate(
+                    @<div>
+                        <div id="panel1" class="e-panel" data-row="0" data-col="0" data-sizeX="6" data-sizeY="2">
+                            <div class="e-panel-header" style="background-color:cadetblue;  height:15%; font-weight:bold; font-size:18px">
+                                <a href="@Url.Action("ViewPlayers", "Cricket", new { area = "" })" >
+                                    <img src="~/Content/Images/a2.png" style="height: 65px; margin-right: 10px;" />
+                                    @Html.ActionLink("VIEW PLAYERS", "ViewPlayers", "Cricket", null, new { style = "color: wheat; text-decoration: none;" })
+                                </a>
+                            </div>
+                            <div>
+                                @Html.Partial("~/Views/_playerDetails1.cshtml", ViewData)
+                            </div>
+                        </div>
+                        <div id="two" class="e-panel" data-row="3" data-col="0" data-sizeX="6" data-sizeY="2">
+                            <div class="e-panel-header" style="background-color: cadetblue; height: 15%; font-weight: bold; font-size: 18px">
+                                <a href="@Url.Action("ViewTeams", "Cricket", new { area = "" })" class="hello">
+                                    <img src="~/Content/Images/a4.png" style="height: 65px; margin-right: 10px;" />
+                                    @Html.ActionLink("VIEW TEAMS", "ViewTeams", "Cricket", null, new { style = "color: wheat; text-decoration: none;" })
+                                </a>
+                            </div>
+                            <div class="e-panel-container">
+                                @Html.Partial("~/Views/_teamDetails1.cshtml", ViewData)
+                            </div>
+                        </div>
+                        <div id="three" class="e-panel" data-row="6" data-col="0" data-sizeX="6" data-sizeY="2">
+                            <div class="e-panel-header" style="background-color: cadetblue; height: 15%; font-weight: bold; font-size: 18px">
+                                <a href="@Url.Action("ViewMatches", "Cricket", new { area = "" })" class="hello">
+                                    <img src="~/Content/Images/a7.png" style="height: 65px; margin-right: 10px;" />
+                                    @Html.ActionLink("VIEW MATCHES", "ViewMatches", "Cricket", null, new { style = "color: wheat; text-decoration: none;" })
+                                </a>
+                            </div>
+                            <div class="e-panel-container">
+                                @Html.Partial("~/Views/_matchDetails1.cshtml", ViewData)
+                            </div>
+                        </div>
+                    </div>).Render()
+    </div>
+</body>

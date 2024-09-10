@@ -1,0 +1,12 @@
+C:\Users\Asus\source\repos\vispl.Training.Crikinfo.VO.ITF\bin\Debug\vispl.Training.Crikinfo.VO.ITF.dll
+C:\Users\Asus\source\repos\vispl.Training.Crikinfo.VO.ITF\bin\Debug\vispl.Training.Crikinfo.VO.ITF.pdb
+C:\Users\Asus\source\repos\vispl.Training.Crikinfo.VO.ITF\obj\Debug\vispl.Training.Crikinfo.VO.ITF.csproj.AssemblyReference.cache
+C:\Users\Asus\source\repos\vispl.Training.Crikinfo.VO.ITF\obj\Debug\vispl.Training.Crikinfo.VO.ITF.csproj.CoreCompileInputs.cache
+C:\Users\Asus\source\repos\vispl.Training.Crikinfo.VO.ITF\obj\Debug\vispl.Training.Crikinfo.VO.ITF.dll
+C:\Users\Asus\source\repos\vispl.Training.Crikinfo.VO.ITF\obj\Debug\vispl.Training.Crikinfo.VO.ITF.pdb
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\bin\vispl.Training.Crikinfo.VO.ITF.dll
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\bin\vispl.Training.Crikinfo.VO.ITF.pdb
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.VO.ITF\obj\Debug\vispl.Training.Crikinfo.VO.ITF.csproj.AssemblyReference.cache
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.VO.ITF\obj\Debug\vispl.Training.Crikinfo.VO.ITF.csproj.CoreCompileInputs.cache
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.VO.ITF\obj\Debug\vispl.Training.Crikinfo.VO.ITF.dll
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.VO.ITF\obj\Debug\vispl.Training.Crikinfo.VO.ITF.pdb

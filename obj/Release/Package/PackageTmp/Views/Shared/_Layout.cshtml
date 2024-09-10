@@ -1,0 +1,33 @@
+﻿@using Syncfusion.EJ2
+@inherits System.Web.Mvc.WebViewPage
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title - CrikScore</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/EJ2/fluent.css" rel="stylesheet" type="text/css" />
+    <style>
+        .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+            margin: 0% !important;
+            max-width: 100%;
+        }
+    </style>
+    <link href="~/Content/EJ2/grouping.css" rel="stylesheet" />
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Content/EJ2/ej2.min.js"></script>
+    <script src="~/Scripts/modernizr-2.8.3.js"></script>
+
+</head>
+<body>
+    <div class="container body-content">
+        @RenderBody()
+
+    </div>
+
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    @Html.EJS().ScriptManager()
+</body>
+</html>

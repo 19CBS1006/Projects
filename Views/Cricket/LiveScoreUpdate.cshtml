@@ -1,0 +1,808 @@
+﻿@model Vispl.Training.Crickinfo.VO.ScoreBoard_VO
+@using Syncfusion.EJ2.DropDowns
+@{
+    var teamAshort = ViewData["BATTING_TEAM_SHORT_NAME"] as string;
+    var teamBshort = ViewData["BOWLING_TEAM_SHORT_NAME"] as string;
+    var teamA = ViewData["BATTING_TEAM_NAME"] as string;
+    var teamB = ViewData["BOWLING_TEAM_NAME"] as string;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "LiveScore - " + teamAshort + " vs " + teamBshort;
+    var overs = ViewData["Balls"] as float?;
+    bool newBowler = ViewData["NewBowler"] != null && (bool)ViewData["NewBowler"];
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <style>
+
+
+        .main-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .container1 {
+            padding: 25px;
+            border: 2px dashed #00ffff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .container2 {
+            padding: 40px;
+            border: 2px dashed skyblue;
+            border-radius: 10px;
+            width: 40%;
+            height:835px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .container3 {
+            padding: 10px;
+            display: flex;
+            border: 2px dashed skyblue;
+            border-radius: 10px;
+            width: 59%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-link {
+            font-size: 1.1em;
+            padding: 10px 15px;
+        }
+
+
+        .nav-item:hover .nav-link {
+            background-color: cornflowerblue;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar {
+            background-color: skyblue;
+        }
+
+
+
+
+        .e-header-text-hello:hover {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        #clock {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                color: #555; /* Text color for labels */
+            }
+
+            .form-group button {
+                width: 20%;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 25px;
+                font-size: 18px; /* Reduced font size */
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s ease; /* Smooth transition for background color change */
+            }
+
+                .form-group button:hover {
+                    background-color: aliceblue; /* Darker background color on hover */
+                }
+    </style>
+</head>
+
+<body>
+    <div>
+        <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark">
+            <div class="container-fluid">
+                <img src="~/Content/Images/live2.png" height="70" style="margin-right:30px; padding-bottom:16px" />
+                @Html.ActionLink($"LIVE SCORE UPDATE", "LiveMatch", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav w-100 d-flex justify-content-center" style="color:white; margin-right:10%">
+                        <li class="nav-item">
+                            @Html.ActionLink("Admin Dashboard", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link", style = "font-weight: bold; color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Players", "ViewPlayers", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Teams", "ViewTeams", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Matches", "ViewMatches", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Match Filter", "MatchFilter", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink(teamA + " Innings", "Batting", "Cricket", new { id = Convert.ToInt32(Session["MATCHID"]), area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink(teamB + " Innings", "Bowling", "Cricket", new { id = Convert.ToInt32(Session["MATCHID"]), area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Back", "Livematch", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                    </ul>
+                </div>
+                <div id="clock"></div>
+            </div>
+        </nav>
+    </div>
+
+    <br />
+
+    <div class="text-danger">
+        @Html.ValidationSummary()
+    </div>
+
+    <div class="container1" style="display: flex; align-items: center; justify-content: space-between; ">
+
+        <div style="display: flex; align-items: center; justify-content: center; margin-left:1%">
+
+            <div style="display: flex; flex-direction: column; align-items: center; margin-right:10%; margin-left:2%">
+                <img src="data:image/png;base64,@ViewData["BATTING_TEAM_ICON"]" style="width: 55px; height: 50px; border-radius: 50%; border: 1px solid; margin-bottom: 5px; " />
+                <div style="text-align: center; font-weight:bold">@teamAshort</div>
+            </div>
+
+            <div style="margin: 0 10px; font-size: 20px;">VS</div>
+
+            <div style="display: flex; flex-direction: column; align-items: center; margin-left: 10%">
+                <img src="data:image/png;base64,@ViewData["BOWLING_TEAM_ICON"]" style="width: 55px; height: 50px; border-radius: 50%; border: 1px solid; margin-bottom: 5px;" />
+                <div style="text-align: center; font-weight: bold">@teamBshort</div>
+            </div>
+
+        </div>
+
+        <div>
+            <img src="data:image/png;base64,@ViewData["STRIKER_PICTURE"]" style=" width: 55px; height: 50px; border-radius: 50%;" /> <span> @ViewData["STRIKER_NAME"] <span style="font-weight:bold; color:gray">(STRIKER)</span> <span style="font-weight:bold; font-size:16px"> - @ViewData["STRIKER_RUNS"] </span> </span>
+        </div>
+
+        <div>
+            <div><img src="data:image/png;base64,@ViewData["NON_STRIKER_PICTURE"]" style="width: 55px; height: 50px; border-radius: 50%;" /> <span> @ViewData["NON_STRIKER_NAME"] <span style="font-weight: bold; color: gray">(NON - STRIKER)</span><span style="font-weight:bold; font-size:16px"> - @ViewData["NON_STRIKER_RUNS"] </span> </span></div>
+        </div>
+
+        <div>
+            <div><img src="data:image/png;base64,@ViewData["BOWLER_PICTURE"]" style=" width: 55px; height: 50px; border-radius: 50%;" /> <span>@ViewData["BOWLER_NAME"] <span style="font-weight: bold; color: gray">(BOWLER)</span></span></div>
+        </div>
+
+
+        <div style="font-size: 40px; font-weight: bold;">
+            <span style="margin-left:7%">@ViewData["Runs"]/@ViewData["Outs"]</span>
+            <div style="font-size: 15px; ">(OVERS: @overs)</div>
+        </div>
+    </div>
+
+    <br />
+
+    @using (Html.BeginForm("LiveScoreUpdate", "Cricket", FormMethod.Post, new { id = "myForm", onsubmit = "return submitForm()" }))
+    {
+        <div class="main-container">
+
+            <div class="container2">
+
+                <div style="display: flex; justify-content: flex-end;">
+                    @Html.EJS().Button("clearAll").Content("Clear").HtmlAttributes(new Dictionary<string, object> { { "type", "button" } }).Click("refresh").Render()
+                </div>
+
+                <div style="display:none">
+                    @Html.HiddenFor(model => model.MatchID, new { name = "MatchID" })
+                    @Html.HiddenFor(model => model.BattingTeamID, new { name = "BattingTeamID" })
+                    @Html.HiddenFor(model => model.BowlingTeamID, new { name = "BowlingTeamID" })
+                    @Html.HiddenFor(model => model.Striker, new { name = "Striker" })
+                    @Html.HiddenFor(model => model.NonStriker, new { name = "NonStriker" })
+                    @Html.HiddenFor(model => model.Bowler, new { name = "Bowler" })
+                    @Html.HiddenFor(model => model.Comment, new { name = "Comment" })
+                </div>
+
+                <div>
+                    <div class="form-group">
+                        <div class="col-md-10 control-label" style="display: flex; align-items: center;">
+                            @Html.LabelFor(model => model.Striker)
+                            <span style="color: red; margin-left: 5px;">*</span>
+                        </div>
+                        <div class="col-md-10">
+                            @Html.EJS().DropDownListFor(model => model.NewStriker).DataSource(ViewData["NotOut"] as List<object>).Enabled(false).HtmlAttributes(new Dictionary<string, object> { { "id", "Striker1" } }).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).Placeholder("Select a Player").Width("50%").ShowClearButton().Render()
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-10 control-label" style="display: flex; align-items: center;">
+                            @Html.LabelFor(model => model.Bowler)
+                            <span style="color: red; margin-left: 5px;">*</span>
+                        </div>
+                        <div class="col-md-10">
+                            @Html.EJS().DropDownListFor(model => model.NewBowler).DataSource(ViewData["Bowler"] as List<object>).Enabled(false).HtmlAttributes(new Dictionary<string, object> { { "id", "Bowler1" } }).Placeholder("Select a Player").Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).Width("50%").ShowClearButton().Render()
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-10 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.Runs)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().RadioButton("zero").Change("toggleSpecialBalls").Label("0").Name("Runs").Value("0").Render()
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().RadioButton("one").Change("toggleSpecialBalls").Label("1").Name("Runs").Value("1").Render()
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().RadioButton("two").Change("toggleSpecialBalls").Label("2").Name("Runs").Value("2").Render()
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().RadioButton("three").Change("toggleSpecialBalls").Label("3").Name("Runs").Value("3").Render()
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().RadioButton("four").Change("toggleSpecialBalls").Label("4").Name("Runs").Value("4").Render()
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().RadioButton("six").Change("toggleSpecialBalls").Label("6").Name("Runs").Value("6").Render()
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+
+                    document.getElementById("Striker").value = '@Session["Striker"]';
+                    document.getElementById("NonStriker").value = '@Session["Non-Striker"]';
+                    document.getElementById("Bowler").value = '@Session["Bowler"]';
+                    document.getElementById("MatchID").value = '@Session["MATCHID"]';
+                    document.getElementById("BattingTeamID").value = '@ViewData["BATTING_TEAM_ID"]';
+                    document.getElementById("BowlingTeamID").value = '@ViewData["BOWLING_TEAM_ID"]';
+
+
+                    document.addEventListener("DOMContentLoaded", function ()
+                    {
+                        let isNewEnabled = @Html.Raw(newBowler.ToString().ToLower());
+                        let bowl = document.getElementById("Bowler1").ej2_instances[0];
+
+                        if (isNewEnabled)
+                        {
+                            bowl.enabled = true;
+                        }
+                        else
+                        {
+                            bowl.enabled = false;
+                            bowl.value = null;
+                        }
+                    });
+                    function toggleSpecialBalls(args)
+                    {
+                        let dropdownObj = document.getElementById("Out").ej2_instances[0];
+                        let strikerDropdown = document.getElementById("Striker1").ej2_instances[0];
+
+                        if (args)
+                        {
+                            dropdownObj.enabled = false;
+                            dropdownObj.value = null;
+                            strikerDropdown.enabled = false;
+                            strikerDropdown.value = null;
+                        }
+                    }
+                    function toggleRuns(args)
+                    {
+                        let dropdownObj = document.getElementById("Out").ej2_instances[0];
+                        let strikerDropdown = document.getElementById("Striker1").ej2_instances[0];
+
+                        let noball = document.getElementById("oneSpecial").ej2_instances[0];
+                        let wideball = document.getElementById("twoSpecial").ej2_instances[0];
+                        let bye = document.getElementById("threeSpecial").ej2_instances[0];
+                        let legbye = document.getElementById("fourSpecial").ej2_instances[0];
+                        let penalty = document.getElementById("fiveSpecial").ej2_instances[0];
+
+                        if (args)
+                        {
+                            dropdownObj.enabled = false;
+                            dropdownObj.value = null;
+                            strikerDropdown.enabled = false;
+                            strikerDropdown.value = null;
+
+                            if (noball.value != null)
+                            {
+                                wideball.disabled = true;
+                                penalty.disabled = true;
+                            }
+
+                            if (noball.value != null && bye.checked == true && legbye.checked == true) {
+                                bye.checked = false;
+                                bye.value = null;
+                            }
+                            else if (noball.value != null && legbye.checked == true && bye.checked == true) {
+                                legbye.checked = false;
+                                legbye.value = null;
+                            }
+                        }
+                    }
+                    function refresh()
+                    {
+                        let isNewEnabled = @Html.Raw(newBowler.ToString().ToLower());
+                        let bowl = document.getElementById("Bowler1").ej2_instances[0];
+                        let dropdownObj = document.getElementById("Out").ej2_instances[0];
+                        let strikerDropdown = document.getElementById("Striker1").ej2_instances[0];
+                        const elements = ["zero", "one", "two", "three", "four", "six"];
+                        const specialElements = ["oneSpecial", "twoSpecial", "threeSpecial", "fourSpecial", "fiveSpecial"];
+
+                        elements.forEach(id => document.getElementById(id).ej2_instances[0].enabled = true);
+                        elements.forEach(id => document.getElementById(id).ej2_instances[0].checked = false);
+                        specialElements.forEach(id => document.getElementById(id).ej2_instances[0].checked = false);
+                        specialElements.forEach(id => document.getElementById(id).ej2_instances[0].enabled = true);
+                        dropdownObj.enabled = true;
+                        strikerDropdown.enabled = false;
+                        strikerDropdown.value = null;
+                        dropdownObj.value = null;
+
+                        if (isNewEnabled) {
+                            bowl.enabled = true;
+                            bowl.value = null;
+                        }
+                    }
+                    function IsOut()
+                    {
+                        let striker = document.getElementById("Striker1").ej2_instances[0];
+                        let out = document.getElementById("Out").ej2_instances[0];
+
+                        if (out.value !== null) {
+                            striker.enabled = true;
+                        }
+                        else {
+                            striker.enabled = false;
+                            striker.value = null;
+                        }
+                    }
+
+                    document.addEventListener("DOMContentLoaded", function ()
+                    {
+                        let noball = document.getElementById("oneSpecial").ej2_instances[0];
+                        let bye = document.getElementById("threeSpecial").ej2_instances[0];
+                        let legbye = document.getElementById("fourSpecial").ej2_instances[0];
+
+                        noball.addEventListener("change", toggleRuns);
+                        bye.addEventListener("change", toggleRuns);
+                        legbye.addEventListener("change", toggleRuns);
+
+                        toggleRuns();
+                    });
+
+                </script>
+
+                <div class="form-group">
+                    <div class="col-md-10 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.SpecialBall)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().CheckBox("oneSpecial").Change("toggleRuns").Label("No-Ball").Disabled(false).Name("SpecialBall").Value("1").Render()
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().CheckBox("twoSpecial").Change("toggleRuns").Label("Wide Ball").Disabled(false).Name("SpecialBall").Value("2").Render()
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().CheckBox("threeSpecial").Change("toggleRuns").Label("Bye").Disabled(false).Name("SpecialBall").Value("3").Render()
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().CheckBox("fourSpecial").Change("toggleRuns").Label("Leg Bye").Disabled(false).Name("SpecialBall").Value("4").Render()
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().CheckBox("fiveSpecial").Change("toggleRuns").Label("Penalty Runs").Disabled(false).Name("SpecialBall").Value("5").Render()
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.LabelFor(model => model.Out)
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().DropDownListFor(model => model.Out).Enabled(true).Change("IsOut").DataSource(ViewData["OutTypes"] as List<object>).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).ShowClearButton().Placeholder("Select a choice").Width("60%").Render()
+                    </div>
+                </div>
+
+                <div class="form-group d-none" id="runout">
+                    <div style=" align-items: center;">
+                        <label for="newChoice" id="newChoice">Please select who got out: </label>
+                    </div>
+                    <div class="col-md-10">
+                        @Html.EJS().CheckBox("StrikerBox").Label(ViewData["STRIKER_NAME"].ToString() + " (S)").Name("newChoice").Value(Convert.ToInt32(Session["Striker"]).ToString()).Render()
+                        @Html.EJS().CheckBox("NonStrikerBox").Label(ViewData["NON_STRIKER_NAME"].ToString() + " (N-S)").Name("newChoice").Value(Convert.ToInt32(Session["Non-Striker"]).ToString()).Render()
+                    </div>
+                </div>
+
+                <script>
+
+                    function runout()
+                    {
+                        let newchecks = document.getElementById("runout");
+                        let outdropdown = document.getElementById("Out").ej2_instances[0];
+                        let noball = document.getElementById("oneSpecial").ej2_instances[0];
+                        let wideball = document.getElementById("twoSpecial").ej2_instances[0];
+                        let penalty = document.getElementById("fiveSpecial").ej2_instances[0];
+
+                        if (outdropdown.value == 103)
+                        {
+                            newchecks.classList.remove("d-none");
+                            noball.disabled = true;
+                            wideball.disabled = true;
+                            penalty.disabled = true;
+                        }
+                        else
+                        {
+                            newchecks.classList.add("d-none");
+                            noball.disabled = false;
+                            wideball.disabled = false;
+                            penalty.disabled = false;
+                        }
+                    }
+
+                    document.addEventListener("DOMContentLoaded", function ()
+                    {
+                        let outdropdown = document.getElementById("Out").ej2_instances[0];
+                        runout();
+                        outdropdown.addEventListener("change", runout);
+                    });
+                </script>
+
+                <div class="form-group">
+                    @Html.EJS().Button("Submit").Content("Post").IsPrimary(true).Render()
+                </div>
+            </div>
+
+            <div class="container3">
+                @Html.EJS().DashboardLayout("dashboard").Columns(8).ContentTemplate(
+                        @<div>
+                            <div id="panel1" class="e-panel" data-row="0" data-col="0" data-sizeX="7" data-sizeY="2">
+                                <div class="e-panel-header" style=" display: flex; justify-content: space-between; align-items: center; height: 10%; font-size: 18px; font-weight: bold;">
+                                    <div class="e-header-text" style="font-weight: bold; ">
+                                        <img src="~/Content/Images/live3.gif" style="width:35px;height:30px;border-radius:50%; " />
+                                        <span style="padding-left:10px">Batsman</span>
+                                    </div>
+                                </div>
+                                <div class="e-panel-container" style="font-size:20px">
+                                    @(Html.EJS().Grid("HALF_DATA_1").DataSource(ViewData["SCOREBOARD"] as List<Vispl.Training.Crickinfo.VO.BATTING_VO>).AllowMultiSorting(true).Columns(col =>
+                            {
+                                col.Field("BatsmanPicture").HeaderText("").Template("<img src=\"data:image/png;base64,${BatsmanPicture}\" style=\"width:45px;height:45px;border-radius:50%;\" />").Width(20).AllowSearching(false).AllowFiltering(false).Add();
+                                col.Field("BatsmanName").HeaderText("NAME").Width("40").AllowSearching(true).Add();
+                                col.Field("TotalRuns").HeaderText("R").Width("10").AllowSearching(true).Add();
+                                col.Field("TotalBalls").HeaderText("B").Width("10").AllowSearching(true).Add();
+                                col.Field("FOUR").HeaderText("4S").Width("10").AllowSearching(true).Add();
+                                col.Field("SIX").HeaderText("6S").Width("10").AllowSearching(true).Add();
+                                col.Field("StrikeRate").HeaderText("S/R").Width("15").AllowSearching(true).Add();
+                            })
+                        .LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+                        .AllowSorting()
+                        .Width(930)
+                        .RowHeight(55)
+                        .Height(170)
+                        .AllowTextWrap()
+                        .EnableHover()
+                        .Render())
+                                </div>
+                            </div>
+
+                            <div id="panel2" class="e-panel" data-row="2" data-col="0" data-sizeX="7" data-sizeY="2">
+                                <div class="e-panel-header" style=" display: flex; justify-content: space-between; align-items: center; height: 10%; font-size: 18px; font-weight: bold;">
+                                    <div class="e-header-text" style="font-weight: bold; ">
+                                        <span style="padding-left:10px">Bowler</span>
+                                    </div>
+                                </div>
+                                <div class="e-panel-container" style="font-size:20px">
+                                    @(Html.EJS().Grid("HALF_DATA_2").DataSource(ViewData["BOWLING_SCORE"] as List<Vispl.Training.Crickinfo.VO.BOWLING_VO>).AllowMultiSorting(true).Columns(col =>
+                            {
+                                col.Field("BatsmanPicture").HeaderText("").Template("<img src=\"data:image/png;base64,${BowlerPicture}\" style=\"width:45px;height:45px;border-radius:50%;\" />").Width(20).AllowSearching(false).AllowFiltering(false).Add();
+                                col.Field("BowlerName").HeaderText("NAME").Width("40").AllowSearching(true).Add();
+                                col.Field("BallCount").HeaderText("B").Width("10").AllowSearching(true).Add();
+                                col.Field("RunsConceded").HeaderText("R").Width("10").AllowSearching(true).Add();
+                                col.Field("Maiden").HeaderText("M").DefaultValue(0).Width("10").AllowSearching(true).Add();
+                                col.Field("WicketsTaken").HeaderText("W").Width("10").AllowSearching(true).Add();
+                                col.Field("EconomyRate").HeaderText("ER").Width("15").AllowSearching(true).Add();
+                            })
+                            .LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+                            .AllowSorting()
+                            .Width(930)
+                            .RowHeight(55)
+                            .Height(170)
+                            .AllowTextWrap()
+                            .EnableHover()
+                            .Render())
+                                </div>
+                            </div>
+
+                            <div id="panel3" class="e-panel" data-row="4" data-col="0" data-sizeX="7" data-sizeY="2">
+                                <div class="e-panel-header" style=" display: flex; justify-content: space-between; align-items: center; height: 10%; font-size: 18px; font-weight: bold;">
+                                    <div class="e-header-text" style="font-weight: bold; ">
+                                        <span style="padding-left:10px">Commentary</span>
+                                    </div>
+                                </div>
+                                <div class="e-panel-container" style="font-size:20px; ">
+                                    @Html.EJS().ListView("Commentary").DataSource(ViewData["COMMENTARY"] as List<string>).Height(200).Render()
+                                </div>
+                            </div>
+                        </div>).Render()
+            </div>
+        </div>
+    }
+
+    <script>
+        function updateTime()
+        {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+
+        function submitForm()
+        {
+            let specialRuns = document.querySelector('input[name="SpecialBall"]:checked');
+            let SStriker = document.getElementById("Striker1").ej2_instances[0];
+            let runs = document.querySelector('input[name="Runs"]:checked');
+            let out = document.getElementById("Out").ej2_instances[0];
+            let oldBowler = '@Session["Bowler"]';
+            let isNewEnabled = @Html.Raw(newBowler.ToString().ToLower());
+            let bowl = document.getElementById("Bowler1").ej2_instances[0];
+
+            if (isNewEnabled) {
+                if (bowl.value === null) {
+                    alert("Please select the Next Bowler.");
+                    return false;
+                }
+                else if (bowl.value == oldBowler) {
+                    alert("You can't select the same bowler who bowled the previous over.");
+                    return false;
+                }
+                else if (bowl.value !== null && !runs && !specialRuns && out.value === null) {
+                    alert("Please select the Runs Conceded.");
+                    return false;
+                }
+                else if (bowl.value !== null && specialRuns && !runs && out.value === null) {
+                    alert("Please select the Runs Conceded for EXTRAS.");
+                    return false;
+                }
+                else if (bowl.value !== null && out.value !== null && SStriker.value === null) {
+                    alert("Please select the Next Striker.");
+                    return false;
+                }
+                else {
+                    Commentary();
+                    return false;
+                }
+            }
+            else if (!isNewEnabled)
+            {
+                if (!specialRuns && !runs) {
+                    alert("Please select a option.");
+                    return false;
+                }
+                else if (specialRuns && !runs) {
+                    alert("Please select the Runs conceded during EXTRAs.");
+                    return false;
+                }
+                else if (out.value !== null && SStriker.value === null && !runs && !specialRuns) {
+                    alert("Please select the Next Striker.");
+                    return false;
+                }
+                else {
+                    Commentary();
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function Commentary()
+        {
+            let STRIKER = '@ViewData["STRIKER_NAME"]';
+            let NONSTRIKER = '@ViewData["NON_STRIKER_NAME"]';
+            let BOWLER = '@ViewData["BOWLER_NAME"]';
+            let BALL = '@ViewData["Balls"]';
+            let specialRuns = document.querySelector('input[name="SpecialBall"]:checked');
+            let SStriker = document.getElementById("Striker1").ej2_instances[0];
+            let runs = document.querySelector('input[name="Runs"]:checked');
+            let out = document.getElementById("Out").ej2_instances[0];
+            let bowl = document.getElementById("Bowler1").ej2_instances[0];
+            let comment = document.getElementById("Comment");
+
+            let string1_0 = "No run scored by " + STRIKER + " on ball number " + BALL + ".";
+            let string1_1 = STRIKER + " to " + NONSTRIKER + ", " + runs.value + " run on ball number " + BALL;
+            let string1_2 = STRIKER + " to " + NONSTRIKER + ", " + runs.value + " runs on ball number " + BALL;
+            let string1_4 = "FOUR runs! " + STRIKER + " finds the boundary on ball number " + BALL + ".";
+            let string1_6 = STRIKER + " hits it for SIX on ball number " + BALL + "."
+
+            let string2_1 = STRIKER + " is out LBW, bowled by " + BOWLER + " on ball number " + BALL + ".";
+            let string2_2 = STRIKER + " is out, caught by [FIELDER] from " + BOWLER + " delivery on ball number: " + BALL;
+            let string2_3 = STRIKER + " got run out by [FIELDER] off + " + BOWLER + "'s bowling on ball number " + BALL + ".";
+            let string2_4 = "Clean bowled! " + BOWLER + " has shattered " + STRIKER + " stumps.";
+            let string2_5 = STRIKER + " is hit wicket, bowled by " + BOWLER + " on ball number " + BALL + ".";
+            let string2_6 = STRIKER + " is dismissed for hitting the ball twice on ball number " + BALL + ".";
+            let string2_7 = STRIKER + " is dismissed for handling the ball on ball number " + BALL + ".";
+
+            let string3 = "We have " + SStriker.text + " walking in to join " + NONSTRIKER;
+
+            let string4_1 = BOWLER + " bowls a no ball, free hit coming up.";
+            let string4_2 = "Wide ball by " + BOWLER + " on ball number " + BALL + ".";
+            let string4_3 = "Byes taken on ball number " + BALL + ".";
+            let string4_4 = "Leg-Byes taken on ball number " + BALL + ".";
+            let string4_5 = "Penalty runs awarded on ball number " + BALL + ".";
+
+            let string5 = "Now, " + BOWLER + " steps in to continue.";
+
+
+            if (runs && !specialRuns) {
+                if (runs.value == 0) {
+                    comment.value = string1_0;
+                }
+                else if (runs.value == 1) {
+                    comment.value = string1_1;
+                }
+                else if (runs.value == 2 || runs.value == 3) {
+                    comment.value = string1_2;
+                }
+                else if (runs.value == 4) {
+                    comment.value = string1_4;
+                }
+                else if (runs.value == 6) {
+                    comment.value = string1_6;
+                }
+            }
+            else if (runs && specialRuns && out.value === null) {
+                if (specialRuns.value == 1) {
+                    if (runs.value == 0) {
+                        comment.value = (string4_1 + "\n" + string1_0);
+                    }
+                    else if (runs.value == 1) {
+                        comment.value = (string4_1 + "\n" + string1_1);
+                    }
+                    else if (runs.value == 2 || runs.value == 3) {
+                        comment.value = (string4_1 + "\n" + string1_2);
+                    }
+                    else if (runs.value == 4) {
+                        comment.value = (string4_1 + "\n" + string1_4);
+                    }
+                    else if (runs.value == 6) {
+                        comment.value = (string4_1 + "\n" + string1_6);
+                    }
+                }
+                else if (specialRuns.value == 2) {
+                    if (runs.value == 0) {
+                        comment.value = (string4_2 + "\n" + string1_0);
+                    }
+                    else if (runs.value == 1) {
+                        comment.value = (string4_2 + "\n" + string1_1);
+                    }
+                    else if (runs.value == 2 || runs.value == 3) {
+                        comment.value = (string4_2 + "\n" + string1_2);
+                    }
+                    else if (runs.value == 4) {
+                        comment.value = (string4_2 + "\n" + string1_4);
+                    }
+                    else if (runs.value == 6) {
+                        comment.value = (string4_2 + "\n" + string1_6);
+                    }
+                }
+                else if (specialRuns.value == 3) {
+                    if (runs.value == 0) {
+                        comment.value = (string4_3 + "\n" + string1_0);
+                    }
+                    else if (runs.value == 1) {
+                        comment.value = (string4_3 + "\n" + string1_1);
+                    }
+                    else if (runs.value == 2 || runs.value == 3) {
+                        comment.value = (string4_3 + "\n" + string1_2);
+                    }
+                    else if (runs.value == 4) {
+                        comment.value = (string4_3 + "\n" + string1_4);
+                    }
+                    else if (runs.value == 6) {
+                        comment.value = (string4_3 + "\n" + string1_6);
+                    }
+                }
+                else if (specialRuns.value == 4) {
+                    if (runs.value == 0) {
+                        comment.value = (string4_4 + "\n" + string1_0);
+                    }
+                    else if (runs.value == 1) {
+                        comment.value = (string4_4 + "\n" + string1_1);
+                    }
+                    else if (runs.value == 2 || runs.value == 3) {
+                        comment.value = (string4_4 + "\n" + string1_2);
+                    }
+                    else if (runs.value == 4) {
+                        comment.value = (string4_4 + "\n" + string1_4);
+                    }
+                    else if (runs.value == 6) {
+                        comment.value = (string4_4 + "\n" + string1_6);
+                    }
+                }
+                else if (specialRuns.value == 5) {
+                    if (runs.value == 0) {
+                        comment.value = (string4_5 + "\n" + string1_0);
+                    }
+                    else if (runs.value == 1) {
+                        comment.value = (string4_5 + "\n" + string1_1);
+                    }
+                    else if (runs.value == 2 || runs.value == 3) {
+                        comment.value = (string4_5 + "\n" + string1_2);
+                    }
+                    else if (runs.value == 4) {
+                        comment.value = (string4_5 + "\n" + string1_4);
+                    }
+                    else if (runs.value == 6) {
+                        comment.value = (string4_5 + "\n" + string1_6);
+                    }
+                }
+            }
+            else if (out.value != null && SStriker.value != null) {
+                if (out.value === 101) {
+                    comment.value = (string2_1 + "\n" + string3);
+                }
+                else if (out.value == 102) {
+                    comment.value = (string2_2 + "\n" + string3);
+                }
+                else if (out.value == 103) {
+                    comment.value = (string2_3 + "\n" + string3);
+                }
+                else if (out.value == 104) {
+                    comment.value = (string2_4 + "\n" + string3);
+                }
+                else if (out.value == 105) {
+                    comment.value = (string2_5 + "\n" + string3);
+                }
+                else if (out.value == 106) {
+                    comment.value = (string2_6 + "\n" + string3);
+                }
+                else if (out.value == 107) {
+                    comment.value = (string2_7 + "\n" + string3);
+                }
+            }
+            else if (bowl.value !== null)
+            {
+                if (runs && !specialRuns)
+                {
+                    if (runs.value == 0) {
+                        comment.value = string5 + "\n" + string1_0;
+                    }
+                    else if (runs.value == 1) {
+                        comment.value = string5 + "\n" + string1_1;
+                    }
+                    else if (runs.value == 2 || runs.value == 3)
+                    {
+                        comment.value = string5 + "\n" + string1_2;
+                    }
+                    else if (runs.value == 4) {
+                        comment.value = string5 + "\n" + string1_4;
+                    }
+                    else if (runs.value == 6) {
+                        comment.value = string5 + "\n" + string1_6;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

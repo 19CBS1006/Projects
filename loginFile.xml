@@ -1,0 +1,19 @@
+<users>
+	<connectionStrings>
+		<connectionString>
+			Server=LAPTOP-EK8NL302\SQLEXPRESS01;database=EmployeeData;Integrated Security=True;
+		</connectionString>
+	</connectionStrings>
+	<user>
+		<username>admin</username>
+		<password>admin</password>
+	</user>
+	<user>
+		<username>super</username>
+		<password>super</password>
+	</user>
+	<user>
+		<username>user</username>
+		<password>user</password>
+	</user>
+</users>

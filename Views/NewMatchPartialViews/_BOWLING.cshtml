@@ -1,0 +1,27 @@
+﻿
+@using Syncfusion.EJ2.Grids
+
+@(Html.EJS().Grid("Data2").DataSource(ViewData["BOWLING"] as List<Vispl.Training.Crickinfo.VO.BOWLING_VO>).AllowMultiSorting(true).Columns(col =>
+{
+    col.Field("BowlerPicture").HeaderText("").Template("<img src=\"data:image/png;base64,${BowlerPicture}\" style=\"width:45px;height:45px;border-radius:50%;\" />").Width(20).AllowSearching(false).AllowFiltering(false).Add();
+    col.Field("BowlerName").HeaderText("").Template("<span style='font-weight:bold;font-size:17px'>${BowlerName}</span>").Width("40").AllowSearching(true).Add();
+    col.Field("BallCount").HeaderText("").Template("<span style='font-weight:bold;font-size:17px'>${BallCount}</span>").Width("10").AllowSearching(true).Add();
+    col.Field("Maiden").HeaderText("").Template("<span style='font-weight:bold;font-size:17px'>${MaidenOvers}</span>").Width("10").AllowSearching(true).Add();
+    col.Field("RunsConceded").HeaderText("").Template("<span style='font-weight:bold;font-size:17px'>${RunsConceded}</span>").Width("10").AllowSearching(true).Add();
+    col.Field("WicketsTaken").HeaderText("").Template("<span style='font-weight:bold;font-size:17px'>${WicketsTaken}</span>").Width("10").AllowSearching(true).Add();
+    col.Field("EconomyRate").HeaderText("").Template("<span style='font-weight:bold;font-size:17px'>${EconomyRate}</span>").Width("15").AllowSearching(true).Add();
+})
+.LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+.AllowSorting()
+.Width(910)
+.RowHeight(55)
+.Height(600)
+.AllowTextWrap()
+.EnableHover()
+.Render())
+
+<style>
+    #Data2 .e-gridheader {
+        display: none;
+    }
+</style>

@@ -1,0 +1,28 @@
+﻿@using Syncfusion.EJ2
+
+@{
+    ViewBag.Title = "Player Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teamDetails = (IEnumerable<object>)ViewData["MatchDetails"];
+}
+
+<div class="main-container">
+    @(Html.EJS().Grid("MatchOverview").DataSource((IEnumerable<Vispl.Training.Crickinfo.VO.Match_VO>)ViewData["MatchDetails"]).AllowMultiSorting(true).Columns(col =>
+{
+    col.Field("Team_A").HeaderText("Team A").Width("150").AllowSearching(true).Add();
+    col.Field("Team_B").HeaderText("Team B").Width("150").AllowSearching(true).Add();
+    col.Field("MatchVenue").HeaderText("Venue").Width("150").AllowSearching(true).Add();
+    col.Field("MatchStatus").HeaderText("Status").Width("150").AllowSearching(true).Add();
+    col.Field("MatchType").HeaderText("Type").Width("150").AllowSearching(true).Add();
+    col.Field("MatchResult").HeaderText("Result").Width("150").AllowSearching(true).Add();
+    col.Field("MatchTimings").HeaderText("Match Scheduled On").Width("150").AllowSearching(true).Add();
+})
+        .LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+    .AllowSorting()
+    .Height(470)
+    .AllowTextWrap()
+    .EnableHover()
+
+    .Render()
+    )
+</div>

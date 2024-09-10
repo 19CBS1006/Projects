@@ -1,0 +1,282 @@
+﻿@model Vispl.Training.Crickinfo.VO.Toss_Decision_VO
+@using Syncfusion
+
+@{
+    var teamA = ViewData["TeamAShortName"] as string;
+    var teamB = ViewData["TeamBShortName"] as string;
+    var teamA_ID = ViewData["TeamAID"] as string;
+    var teamB_ID = ViewData["TeamBID"] as string;
+    var matchID = ViewData["MatchID"] as string;
+    var teamAIcon = ViewData["TeamAIcon"] as string;
+    var teamBIcon = ViewData["TeamBIcon"] as string;
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = teamA + " vs " + teamB + " (TOSS)"  ;
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <style>
+        .main-container {
+            padding: 40px;
+            border: 2px dashed #007bff; 
+            border-radius: 10px; 
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .nav-link {
+            font-size: 1.1em;
+            padding: 10px 15px;
+        }
+
+
+        .nav-item:hover .nav-link {
+            background-color: cornflowerblue;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar {
+            background-color: skyblue;
+        }
+
+
+        .e-header-text-hello:hover {
+            color: white;
+            transition: color 0.3s ease;
+        }
+
+        #clock {
+            background: #fff;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            font-size:15px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                color: #555; /* Text color for labels */
+            }
+
+            .form-group button {
+                width: 10%;
+                padding: 12px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 25px;
+                font-size: 18px; /* Reduced font size */
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s ease; /* Smooth transition for background color change */
+            }
+
+                .form-group button:hover {
+                    background-color: aliceblue; /* Darker background color on hover */
+                }
+    </style>
+</head>
+<body>
+    <div>
+        <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark ">
+            <div class="container-fluid">
+                <img src="~/Content/Images/a2.png" height="70" style="margin-right:30px" />
+                @Html.ActionLink($"ADMIN MATCH FORM", "LiveMatch", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav w-100 d-flex justify-content-center" style="color:white; margin-right:10%">
+                        <li class="nav-item">
+                            @Html.ActionLink("Admin Dashboard", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link", style = "font-weight: bold; color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Players", "ViewPlayers", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Teams", "ViewTeams", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Matches", "ViewMatches", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Match Filter", "MatchFilter", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Logout", "UserPage", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                    </ul>
+                </div>
+                <div id="clock"></div>
+            </div>
+        </nav>
+    </div>
+
+    <br />
+
+    <div class="form-group" style="background-color: aliceblue; border-radius: 10px; padding: 10px; border: 2px dashed #e4e4eb;">
+        <div>
+            <img src="data:image/png;base64,@teamAIcon" style="width:55px;height:50px;border-radius:50%; margin-right:1%" />
+            <span style="font-weight:bold">VS</span>
+            <img src="data:image/png;base64,@teamBIcon" style="width: 55px; height: 50px; border-radius: 50%; margin-left: 1% " />
+        </div>
+    </div>
+
+
+
+    @using (Html.BeginForm("TossDecision", "Cricket", FormMethod.Post, new { id = "tossForm" }))
+    {
+        <input type="hidden" name="ID" value="@matchID" />
+        <div class="main-container">
+            <div class="form-group" style="display: block;">
+                <div class="col-md-10">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.Label("Select your choice (" + teamA + ") : ")
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="row">
+                        @Html.EJS().RadioButtonFor(model => model.TeamASide, "HEADS").Label("HEADS").Name("TeamASide").Value("HEADS").Render()
+                    </div>
+                    <div class="row">
+                        @Html.EJS().RadioButtonFor(model => model.TeamASide, "TALES").Label("TALES").Name("TeamASide").Value("TALES").Checked(true).Render()
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group" style="display: block;">
+                <div class="col-md-10">
+                    <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                        @Html.Label("Select your choice (" + teamB + ") : ")
+                        <span style="color: red; margin-left: 5px;">*</span>
+                    </div>
+                    <div class="row">
+                        @Html.EJS().RadioButtonFor(model => model.TeamBSide, "HEADS").Label("HEADS").Name("TeamBSide").Value("HEADS").Checked(true).Render()
+                    </div>
+                    <div class="row">
+                        @Html.EJS().RadioButtonFor(model => model.TeamBSide, "TALES").Label("TALES").Name("TeamBSide").Value("TALES").Render()
+                    </div>
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.TossWonBy, new { name = "TossWonBy" })
+            @Html.HiddenFor(model => model.TossLostBy, new { name = "TossLostBy" })
+            @Html.HiddenFor(model => model.MatchID, new { name = "MatchID" })
+
+
+            <div class="form-group" style="display:grid">
+                @Html.EJS().Button("button").Content("TOSS").IsPrimary(true).HtmlAttributes(new Dictionary<string, object>
+                        { { "onclick", "submitForm()" }, { "type", "button" } }).Render()
+            </div>
+
+
+            <div id="decision-form-group" class="form-group" style="display: none;">
+                <div class="col-md-2 control-label" style="display: flex; align-items: center;">
+                    @Html.Label("Please Select your Choice", htmlAttributes: new { id = "decision-label" })
+                    <span style="color: red; margin-left: 5px;">*</span>
+                </div>
+                @Html.EJS().RadioButtonFor(model => model.Decision, "0").Label("BATTING").Name("Decision").Value("0").Checked(true).Render()
+                @Html.EJS().RadioButtonFor(model => model.Decision, "1").Label("BOWLING").Name("Decision").Value("1").Render()
+                <div>
+                    <br />
+                    @Html.EJS().Button("button1").Content("Submit").IsPrimary(true).HtmlAttributes(new Dictionary<string, object>
+                            { { "onclick", "finalSubmit()" }, { "type", "button" } }).Render()
+                </div>
+            </div>
+        </div>
+    }
+
+
+    <script>
+        function updateTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+        function submitForm()
+        {
+            var wonBy = "";
+            var lossBy = "";
+            var matchid = '@matchID';
+            var wonByName = "";
+            var lossByName = "";
+            var result = Math.floor(Math.random() * 2);
+            var teama = '@teamA';
+            var teamb = '@teamB';
+            var teamaID = '@teamA_ID';
+            var teambID = '@teamB_ID';
+            var teamAChoice = document.querySelector('input[name="TeamASide"]:checked').value;
+            var teamBChoice = document.querySelector('input[name="TeamBSide"]:checked').value;
+
+            console.log(teamAChoice);
+            console.log(teamBChoice);
+
+            var tossResult = result === 0 ? "HEADS" : "TALES";
+
+
+            if (teamAChoice === tossResult)
+            {
+                wonBy = teamaID;
+                wonByName = teama;
+                lossBy = teambID;
+                lossByName = teamb;
+                alert("The toss result is: " + tossResult + "\n" + teama + " won the toss!");
+            }
+            else if (teamBChoice === tossResult)
+            {
+                wonBy = teambID;
+                wonByName = teamb;
+                lossBy = teamaID;
+                lossByName = teama;
+                alert("The toss result is: " + tossResult + "\n" + teamb + " won the toss!");
+            }
+
+
+            document.getElementById("TossWonBy").value = wonBy;
+            document.getElementById("TossLostBy").value = lossBy;
+            document.getElementById("MatchID").value = matchid;
+
+            value1 = document.getElementById("TossWonBy").value;
+            value2 = document.getElementById("TossLostBy").value;
+
+            console.log("WON By: " + value1 + " " + wonByName);
+            console.log("LOST By: " + value2 + " " + lossByName);
+
+            document.querySelectorAll('.form-group').forEach(function (element)
+            {
+                element.style.display = 'none';
+            });
+
+            document.getElementById('decision-form-group').style.display = 'block';
+            document.getElementById('decision-label').innerText = wonByName + " chose to: ";
+
+            return;
+        }
+        function finalSubmit()
+        {
+            document.getElementById("tossForm").submit();
+        }
+    </script>
+
+
+</body>
+</html>

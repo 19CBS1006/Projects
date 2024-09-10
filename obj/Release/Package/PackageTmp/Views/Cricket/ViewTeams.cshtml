@@ -1,0 +1,135 @@
+﻿@using Syncfusion.EJ2
+
+@{
+    ViewBag.Title = "Team Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var navbarColor = (TempData["kaun"] as string == "user") ? "cadetblue" : "royalblue";
+
+}
+
+<style>
+    body {
+        background-color: white
+    }
+
+    .login-container h2 {
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333; /* Text color for the heading */
+    }
+
+    .navbar-brand {
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+
+    .nav-link {
+        font-size: 1.1em;
+        padding: 10px 15px;
+    }
+
+
+    .nav-item:hover .nav-link {
+        background-color: #007bff;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #555; /* Text color for labels */
+        }
+
+        .form-group button {
+            width: 10%;
+            padding: 12px;
+            margin-right: 5%;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px; /* Reduced font size */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+        }
+
+            .form-group button:hover {
+                background-color: aliceblue; /* Darker background color on hover */
+            }
+
+
+</style>
+
+<body>
+
+    <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark" style="background-color: @navbarColor">
+        <div class="container-fluid">
+            <img src="~/Content/Images/o.png" height="100" style="margin-right:1%"/>
+            @Html.ActionLink("TEAMS", "ViewTeams", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-lg-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("BACK", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("VIEW PLAYERS", "ViewPlayers", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br />
+
+    <div>
+        <script>
+            function formatMembersList(members)
+            {
+                let formattedList = "";
+                for (let i = 0; i < members.length; i++)
+                {
+                    if (members[i].trim() !== "")
+                    {
+                        formattedList += (i + 1) + ". " + members[i].trim() + "<br>"; 
+                    }
+                }
+                return formattedList;
+            }
+        </script>
+
+        @(Html.EJS().Grid("HelloGrid").DataSource((IEnumerable<Vispl.Training.Crickinfo.VO.Team_VO>) TempData["TeamDetails"]).CssClass("grid-background").EnableVirtualization().AllowSorting().AllowFiltering(true)
+            .AllowMultiSorting(true).Columns(col =>
+    {
+        col.Field("TeamIcon").HeaderText("Team Logo").Template("<img src=\"data:image/png;base64,${TEAM_ICON}\" style=\"width:60px;height:60px; \" />").Width(100).AllowSearching(false).Add();
+        col.Field("TeamName").HeaderText("Team Name").Width("150").AllowSearching(true).Add();
+        col.Field("TeamShortName").HeaderText("Team Short Name").Width("150").AllowSearching(true).Add();
+        col.Field("TeamCaptain").HeaderText("Team Captain").Width("150").AllowSearching(true).Add();
+        col.Field("TeamViceCaptain").HeaderText("Team Vice Captain").Width("150").AllowSearching(true).Add();
+        col.Field("Members").Template("<div>${formatMembersList(data.Members)}</div>").HeaderText("Team Members").Width(150).AllowSearching(true).Add();
+        col.Field("TeamKeeper").HeaderText("Wicket Keeper").Width("150").AllowSearching(true).Add();
+    }).EditSettings(edit => { edit.Mode(Syncfusion.EJ2.Grids.EditMode.Batch); }).Toolbar(new List<string>() { "Add", "Delete", "Update", "Cancel" })
+        .AllowPaging().PageSettings(page => page.PageCount(2))
+        .AllowSorting(true)
+        .AllowSelection(true)
+        .Height(500)
+        .AllowTextWrap()
+        .EnableHover()
+        .Render()
+        )
+    </div>
+
+
+
+</body>

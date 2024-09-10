@@ -1,0 +1,9 @@
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.DL\bin\Debug\vispl.Training.Crikinfo.DL.dll
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.DL\bin\Debug\vispl.Training.Crikinfo.DL.pdb
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.DL\obj\Debug\vispl.Training.Crikinfo.DL.csproj.AssemblyReference.cache
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.DL\obj\Debug\vispl.Training.Crikinfo.DL.csproj.CoreCompileInputs.cache
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\bin\vispl.Training.Crikinfo.DL.dll
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\bin\vispl.Training.Crikinfo.DL.pdb
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.DL\obj\Debug\vispl.Tr.54BCB3C4.Up2Date
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.DL\obj\Debug\vispl.Training.Crikinfo.DL.dll
+C:\Users\Asus\source\repos\Cricket_ScoreBoard\DLL\vispl.Training.Crikinfo.DL\obj\Debug\vispl.Training.Crikinfo.DL.pdb

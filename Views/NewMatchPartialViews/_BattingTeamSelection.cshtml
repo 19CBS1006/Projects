@@ -1,0 +1,4 @@
+﻿@using Syncfusion.EJ2.DropDowns
+
+@Html.EJS().DropDownListFor(model => model.Striker).DataSource(TempData["TeamAPlayers"]).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Value" }).Placeholder("Select the Striker").Width("20%").Render()
+

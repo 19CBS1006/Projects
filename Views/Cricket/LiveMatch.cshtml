@@ -1,0 +1,129 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "LiveMatch";
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <style>
+            .navbar-brand {
+                font-weight: bold;
+            }
+
+            .nav-link {
+                font-size: 1.1em;
+                padding: 10px 15px;
+            }
+
+
+            .nav-item:hover .nav-link {
+                background-color: cornflowerblue;
+                color: white;
+                transition: background-color 0.3s ease;
+            }
+
+            .navbar {
+                background-color: skyblue;
+            }
+
+
+            .e-header-text-hello:hover {
+                color: white;
+                transition: color 0.3s ease;
+            }
+
+            #clock {
+                background: #fff;
+                padding: 15px;
+                border-radius: 10px;
+            }
+        </style>
+    </head>
+<body>
+    <div>
+        <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark ">
+            <div class="container-fluid">
+                <img src="~/Content/Images/a2.png" height="70" style="margin-right:30px" />
+                @Html.ActionLink($"ADMIN MATCH FORM", "LiveMatch", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav w-100 d-flex justify-content-center" style="color:white; margin-right:10%">
+                        <li class="nav-item">
+                            @Html.ActionLink("Admin Dashboard", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link", style = "font-weight: bold; color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Players", "ViewPlayers", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Teams", "ViewTeams", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Matches", "ViewMatches", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Match Filter", "MatchFilter", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                        <li class="nav-item">
+                            @Html.ActionLink("Logout", "UserPage", "Cricket", new { area = "" }, new { @class = "nav-link", style = "color:white" })
+                        </li>
+                    </ul>
+                </div>
+                <div id="clock"></div>
+            </div>
+        </nav>
+    </div>
+
+    <br />
+
+    <div>
+        @Html.EJS().DashboardLayout("layout").Columns(6).ContentTemplate(
+            @<div>
+                <div id="panel1" class="e-panel" data-row="0" data-col="0" data-sizeX="4" data-sizeY="2">
+                    <div class="e-panel-header" style=" display: flex; justify-content: space-between; align-items: center; height: 12%; font-size: 18px; font-weight: bold; ">
+                        <div class="e-header-text" style="font-weight: bold;">
+                            <a href="@Url.Action("ViewPlayers", "Cricket", new { area = "" })">
+                                @Html.ActionLink("Matches Scheduled", "ViewMatches", "Cricket", null, new { style = "color: wheat; text-decoration: none;" })
+                            </a>
+                        </div>
+                    </div>
+                    <div class="e-panel-container">
+                         @Html.Partial("~/Views/_Matches_1.cshtml", ViewData)
+                    </div>
+                </div>
+
+                <div id="panel2" class="e-panel" data-row="0" data-col="4" data-sizeX="2" data-sizeY="2">
+                    <div class="e-panel-header" style=" display: flex; justify-content: space-between; align-items: center; height: 12%; font-size: 18px; font-weight: bold; ">
+                        <div class="e-header-text" style="font-weight: bold;">
+                            <a href="@Url.Action("ViewPlayers", "Cricket", new { area = "" })">
+                                @Html.ActionLink("Match Results", "ViewMatches", "Cricket", null, new { style = "color: wheat; text-decoration: none;" })
+                            </a>
+                        </div>
+                    </div>
+                    <div class="e-panel-container">
+                        @Html.Partial("~/Views/_Matches_2.cshtml", ViewData)
+                    </div>
+                </div>
+            </div>).Render()
+    </div>
+
+    <script>
+        function updateTime()
+        {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>

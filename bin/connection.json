@@ -1,0 +1,58 @@
+{
+  "ConnectionString": {
+    "Property": [
+      {
+        "name": "Server",
+        "text": "LAPTOP-EK8NL302\SQLEXPRESS01"
+      },
+      {
+        "name": "Database",
+        "text": "EmployeeData"
+      },
+      {
+        "name": "Username",
+        "text": ""
+      },
+      {
+        "name": "Password",
+        "text": ""
+      },
+      {
+        "name": "Port",
+        "text": ""
+      },
+      {
+        "name": "Timeout",
+        "text": "30"
+      },
+      {
+        "name": "IntegratedSecurity",
+        "text": "True"
+      },
+      {
+        "name": "Encrypt",
+        "text": "True"
+      },
+      {
+        "name": "TrustServerCertificate",
+        "text": "True"
+      },
+      {
+        "name": "ConnectionTimeout",
+        "text": "15"
+      },
+      {
+        "name": "MaxPoolSize",
+        "text": "100"
+      },
+      {
+        "name": "MinPoolSize",
+        "text": "10"
+      },
+      {
+        "name": "Pooling",
+        "text": "True"
+      }
+    ]
+  }
+}

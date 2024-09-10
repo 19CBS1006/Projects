@@ -1,0 +1,24 @@
+﻿@using Syncfusion.EJ2
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var Data = ViewData["Players_TeamA"];
+}
+
+
+<div class="main-container">
+    @(Html.EJS().Grid("Data").DataSource((IEnumerable<Vispl.Training.Crickinfo.VO.Player_VO>)Data).AllowMultiSorting(true).Columns(col =>
+{
+    col.Field("ProfilePicture").HeaderText("").Template("<img src=\"data:image/png;base64,${picture}\" style=\"width:45px;height:45px;border-radius:50%;\" />").Width(100).AllowSearching(false).Add();
+    col.Field("FirstName").HeaderText("First Name").Width("150").AllowSearching(true).Add();
+    col.Field("MiddleName").HeaderText("Middle Name").Width("150").AllowSearching(true).Add();
+    col.Field("LastName").HeaderText("Last Name").Width("150").AllowSearching(true).Add();
+})
+        .LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+    .AllowSorting()
+    .RowHeight(55)
+    .Height(540)
+    .AllowTextWrap()
+    .EnableHover()
+    .Render())
+</div>

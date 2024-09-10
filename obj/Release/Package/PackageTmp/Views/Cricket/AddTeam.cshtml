@@ -1,0 +1,287 @@
+﻿@model Vispl.Training.Crickinfo.VO.Team_VO
+@using Syncfusion.EJ2.DropDowns
+@{
+    ViewBag.Title = "New Team Form";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var players = TempData["Players"] as List<object>;
+}
+
+<style>
+    body {
+        background-color: white
+    }
+
+    
+
+    .login-container h2 {
+        margin-bottom: 20px;
+        text-align: center;
+        color: #333; /* Text color for the heading */
+    }
+
+    .navbar-brand {
+        font-size: 1.5em;
+        font-weight: bold;
+        width: 100%;
+    }
+
+
+    .nav-link {
+        font-size: 1.1em;
+        padding: 10px 15px;
+    }
+
+
+    .nav-item:hover .nav-link {
+        background-color: #007bff;
+        color: white;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            color: #555; /* Text color for labels */
+        }
+
+        .form-group button {
+            width: 10%;
+            padding: 12px;
+            margin-right:5%;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px; /* Reduced font size */
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* Smooth transition for background color change */
+        }
+
+            .form-group button:hover {
+                background-color: aliceblue; /* Darker background color on hover */
+            }
+
+    .timepass{
+        border: 2px dashed #007bff; /* Add a dashed border */
+        border-radius: 10px;
+    }
+
+    .e-file-select,
+    .e-file-drop {
+        display: none;
+    }
+
+    .e-upload.e-control-wrapper, .e-bigger.e-small .e-upload.e-control-wrapper {
+        width: 100%;
+        border: 1px dashed #007bff !important;
+    }
+
+</style>
+    
+<body>
+
+    <nav id="nsvbar" class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-primary" style="border-radius:10px">
+        <div class="container-fluid">
+            <img src="/Content/Images/k.png" height="110" style="margin-right:30px" />
+            @Html.ActionLink("TEAM FORM", "AddTeam", "Cricket", new { area = "" }, new { @class = "navbar-brand" })
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-lg-auto">
+                    <li class="nav-item">
+                        @Html.ActionLink("BACK", "AdminPage", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    <li class="nav-item">
+                        @Html.ActionLink("VIEW", "ViewTeams", "Cricket", new { area = "" }, new { @class = "nav-link" })
+                    </li>
+                    `
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <br />
+
+    <div class="text-danger">
+        @Html.ValidationSummary()
+    </div>
+
+    <div class="form-group">
+        <h4 style="text-align:end">Total Count: <span style="color:black">@(Convert.ToInt32(TempData["Count"]))</span></h4>
+    </div>
+
+    <div class="timepass" style=" width: 100%; padding-top:3% ">
+
+        <form id="cricketForm" action="@Url.Action("AddTeam", "Cricket")" method="POST" enctype="multipart/form-data">
+
+
+
+            @*Team Name*@
+            <div class="form-group">
+                <div class="col-md-2 control-label" style="display: flex; justify-content: center; margin-left  : 34.5%">
+                    @Html.LabelFor(model => model.TeamName)
+                    <span style="color: red; margin-left: 5px;">*</span>
+                </div>
+                <div class="col-md-10" style="text-align:center; margin-left:120px">
+                    @Html.EJS().TextBoxFor(model => model.TeamName).Placeholder("Enter Team Name").Width("20%").Value("").ShowClearButton().Render()
+                </div>
+            </div>
+
+            @*Team Short Name*@
+            <div class="form-group">
+                <div class="col-md-2 control-label" style="display: flex; justify-content: center; margin-left  : 35.8%">
+                    @Html.LabelFor(model => model.TeamShortName)
+                    <span style="color: red; margin-left: 5px;">*</span>
+                </div>
+                <div class="col-md-10" style="text-align:center; margin-left:120px">
+                    @Html.EJS().TextBoxFor(model => model.TeamShortName).Placeholder("Enter Team Short Name").Value("").Width("20%").ShowClearButton().Render()
+                </div>
+            </div>
+
+            @*Team Members*@
+            <div class="form-group">
+                <div class="col-md-2 control-label" style="display: flex; justify-content: center; margin-left  : 34.8%">
+                    @Html.LabelFor(model => model.TeamMembers)
+                </div>
+                <div class="col-md-10" style="margin-left:120px; text-align:center">
+                    @Html.EJS().MultiSelectFor(model => model.TeamMembers).DataSource(players).Fields(new MultiSelectFieldSettings { Text = "Text", Value = "Value" }).Placeholder("Select Team Members").Width("20%").ShowClearButton().HtmlAttributes(new Dictionary<string, object> { { "id", "TeamMembers" } }).Render()
+                </div>
+            </div>
+
+            @*Team Captain*@
+            <div class="form-group">
+                <div class="col-md-2 control-label" style="display: flex; justify-content: center; margin-left  : 34.5%">
+                    @Html.LabelFor(model => model.TeamCaptain)
+                </div>
+                <div class="col-md-10" style="text-align:center; margin-left:120px">
+                    @Html.EJS().DropDownListFor(model => model.TeamCaptain).DataSource(players).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Text" }).Placeholder("Enter Team Captain").Width("20%").HtmlAttributes(new Dictionary<string, object> { { "id", "TeamCaptain" } }).ShowClearButton().Render()
+                </div>
+            </div>
+
+            @*Team Vice Captain*@
+            <div class="form-group">
+                <div class="col-md-2 control-label" style="display: flex; justify-content: center; margin-left  : 35.6%">
+                    @Html.LabelFor(model => model.TeamViceCaptain)
+                </div>
+                <div class="col-md-10" style="text-align:center; margin-left:120px">
+                    @Html.EJS().DropDownListFor(model => model.TeamViceCaptain).DataSource(players).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Text" }).Placeholder("Enter Team Vice Captain").Width("20%").ShowClearButton().HtmlAttributes(new Dictionary<string, object> { { "id", "TeamViceCaptain" } }).Render()
+                </div>
+            </div>
+
+            @*Wicket Keeper*@
+            <div class="form-group">
+                <div class="col-md-2 control-label" style="display: flex; justify-content: center; margin-left  : 35%">
+                    @Html.LabelFor(model => model.TeamKeeper)
+                </div>
+                <div class="col-md-10" style="text-align:center; margin-left:120px">
+                    @Html.EJS().DropDownListFor(model => model.TeamKeeper).DataSource(players).Fields(new DropDownListFieldSettings { Text = "Text", Value = "Text" }).AllowFiltering(true).Placeholder("Select Wicket Keeper").Width("20%").ShowClearButton().HtmlAttributes(new Dictionary<string, object> { { "id", "TeamKeeper" } }).Render()
+                </div>
+            </div>
+
+            @*Team Icon*@
+            <div class="form-group">
+                <div class="col-md-2 control-label" style="display: flex; justify-content: center; margin-left: 34.5%">
+                    @Html.LabelFor(model => model.TeamIcon)
+                    <span style="color: red; margin-left: 5px;">*</span>
+                </div>
+
+                <div class="col-md-10" style=" width:50%; margin-left:39.8%; ">
+                    @Html.EJS().Uploader("UploadFiles").AllowedExtensions(".jpeg, .jpg, .png, .ico").Removing("filesRemoving").Selected("filesSelect").Multiple(false).AutoUpload(false).MaxFileSize(1000000).Render()
+                </div>
+            </div>
+
+            @*Submit*@
+            <div class="form-group" style=" text-align:center; margin-top:3% ">
+                @Html.EJS().Button("button").Content("ADD").IsPrimary(true).HtmlAttributes(new Dictionary<string, object>
+                { { "onclick", "submitForm()" }, { "type", "button" } }).Render()
+            </div>
+        </form>
+    </div>
+
+    <script>
+
+        var size;
+        var isFileSelected = false;
+
+        function imageSelected(args) {
+            var uploadObj = document.getElementById("UploadFiles")
+            args.filesData.splice(1);
+            var filesData = uploadObj.ej2_instances[0].getFilesData();
+            var allFiles = filesData.concat(args.filesData);
+
+            if (allFiles.length > 1) {
+                allFiles = allFiles.slice(0, 1);
+            }
+
+            args.filesData = allFiles;
+            args.modifiedFilesData = args.filesData;
+            args.isModified = true;
+        }
+
+        function imageUnSelected(args) {
+            args.postRawFile = false;
+        }
+
+        function filesSelect(args) {
+            if (args.filesData.length > 0) {
+                isFileSelected = true;
+                size = args.filesData[0].size;
+            }
+            else {
+                isFileSelected = false;
+            }
+        }
+
+        function filesRemoving(args) {
+            var uploaderInstance = document.getElementById("UploadFiles").ej2_instances[0];
+            var remainingFiles = uploaderInstance.getFilesData().length - 1;
+
+            if (remainingFiles === 0) {
+                isFileSelected = false;
+                size = 0;
+                console.log("FIle is Removed");
+            }
+        }
+
+        function submitForm() {
+            var teamName = document.getElementById("TeamName");
+            var teamShortName = document.getElementById("TeamShortName");
+            var members = document.getElementById("TeamMembers").ej2_instances[0];
+            var value1 = JSON.stringify(members.value);
+
+
+            if (teamName.value === "") {
+                alert("Please enter a Team Name");
+                teamName.autofocus();
+            }
+            else if (teamShortName.value === "") {
+                alert("Please enter a Short Name ");
+                teamShortName.autofocus();
+            }
+            else if (!isFileSelected) {
+                alert("No file selected.");
+                return;
+            }
+            else if (size > 1000000) {
+                alert("File is bigger than 1 MB.");
+                return;
+            }
+            else {
+
+                console.log(value1);
+                document.getElementById("cricketForm").submit();
+                alert("Team added successfully");
+            }
+        }
+    </script>
+
+</body>
+

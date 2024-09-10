@@ -1,0 +1,43 @@
+﻿@using Syncfusion.EJ2
+
+@{
+    ViewBag.Title = "Player Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var teamDetails =  (IEnumerable<object>)ViewData["TeamDetails"];
+}
+
+<div class="main-container">
+    <script>
+        function formatMembersList(members)
+        {
+            let formattedList = "";
+            for (let i = 0; i < members.length; i++)
+            {
+                if (members[i].trim() !== "")
+                {
+                    formattedList += (i + 1) + ". " + members[i].trim() + "<br>";
+                }
+            }
+            return formattedList;
+        }
+    </script>
+
+    @(Html.EJS().Grid("HelloGrid").DataSource((IEnumerable<object>)teamDetails).FilterSettings(filter => filter.Type(Syncfusion.EJ2.Grids.FilterType.Menu)).Columns(col =>
+{
+    col.Field("TeamIcon").HeaderText("Team Logo").Template("<img src=\"data:image/png;base64,${TEAM_ICON}\" style=\"width:55px;height:50px;border-radius:100%; \" />").Width(100).AllowSearching(false).Add();
+    col.Field("TeamName").HeaderText("Team Name").Width("150").AllowSearching(true).Add();
+    col.Field("TeamShortName").HeaderText("Team Short Name").Width("150").AllowSearching(true).Add();
+    col.Field("TeamCaptain").HeaderText("Team Captain").Width("150").AllowSearching(true).Add();
+    col.Field("TeamViceCaptain").HeaderText("Team Vice Captain").Width("150").AllowSearching(true).Add();
+    col.Field("Members").Template("<div>${formatMembersList(data.Members)}</div>").HeaderText("Team Members").Width("180").AllowSearching(true).Add();
+    col.Field("TeamKeeper").HeaderText("Wicket Keeper").Width("150").AllowSearching(true).Add();
+})
+        .LoadingIndicator(l => { l.IndicatorType(Syncfusion.EJ2.Grids.IndicatorType.Shimmer); })
+    .AllowSorting()
+    .Height(470)
+    .AllowTextWrap()
+    .EnableHover()
+
+    .Render()
+    )
+</div>
